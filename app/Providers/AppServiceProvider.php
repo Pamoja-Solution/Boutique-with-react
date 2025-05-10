@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\User;
+use App\Policies\UserPolicy;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\ServiceProvider;
 
@@ -10,6 +13,10 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Register any application services.
      */
+    protected $policies = [
+        User::class => UserPolicy::class,
+        // Ajoutez d'autres modèles/policies ici
+    ];
     public function register(): void
     {
         //
@@ -20,6 +27,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        //$this->registerPolicies();
+
+        // Définir des gates globaux
+        Gate::define('access-dashboard', fn (User $user) => $user->isAdminOrManager());
+        Gate::define('manage-products', fn (User $user) => $user->canManageProducts());
         Vite::prefetch(concurrency: 3);
     }
 }

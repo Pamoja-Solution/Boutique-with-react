@@ -5,21 +5,43 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
 
-export default function Login({ status, canResetPassword }) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+export default function Login({ status, canResetPassword,flash }) {
+    const  data  = useForm({
         email: '',
         password: '',
         remember: false,
     });
+    useEffect(() => {
+      if (flash?.message) {
+          toast.success(flash.message);
+      }
+      if (flash?.error) {
+          toast.error(flash.error);
+      }
+  }, [flash]);
+
 
     const submit = (e) => {
-        e.preventDefault();
+      e.preventDefault();
+      data.post(route('login'), {
+        preserveScroll: true, // Empêche le rechargement de la page
+        onSuccess: () => {
+          
+        },
+        onFinish: () => data.password="",
 
-        post(route('login'), {
-            onFinish: () => reset('password'),
-        });
+        onError:()=>{
+
+          toast.error("Une erreur");
+
+        }
+      });
     };
+    
+    //console.log(sessionStorage);
 
     return (
         <GuestLayout>
@@ -31,57 +53,52 @@ export default function Login({ status, canResetPassword }) {
                 </div>
             )}
 
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        isFocused={true}
-                        onChange={(e) => setData('email', e.target.value)}
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
+            <form onSubmit={submit} className=''>
+              <div className="space-y-4">
+                <div className="form-control">
+                  <InputLabel htmlFor="email" value="Email" />
+                  <TextInput
+                    id="email"
+                    type="email"
+                    name="email"
+                    value={data.email}
+                    className="input input-bordered mt-1 block w-full"
+                    autoComplete="username"
+                    isFocused={true}
+                    onChange={(e) => data.setData('email', e.target.value)}
+                  />
+                  <InputError message={data.errors.email} className="mt-2" />
+                </div>
+                
+                <div className="form-control">
+                  <InputLabel htmlFor="password" value="Mot de passe" />
+                  <TextInput
+                    id="password"
+                    type="password"
+                    name="password"
+                    value={data.password}
+                    className="input input-bordered mt-1 block w-full"
+                    autoComplete="current-password"
+                    onChange={(e) => data.setData('password', e.target.value)}
+                  />
+                  <InputError message={data.errors.password} className="mt-2" />
                 </div>
 
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="current-password"
-                        onChange={(e) => setData('password', e.target.value)}
+                <div className="form-control">
+                  <label className="label cursor-pointer justify-start gap-2">
+                    <input
+                      type="checkbox"
+                      name="remember"
+                      checked={data.remember}
+                      onChange={(e) => data.setData('remember', e.target.checked)}
+                      className="checkbox checkbox-accent"
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4 block">
-                    <label className="flex items-center">
-                        <Checkbox
-                            name="remember"
-                            checked={data.remember}
-                            onChange={(e) =>
-                                setData('remember', e.target.checked)
-                            }
-                        />
-                        <span className="ms-2 text-sm text-gray-600">
-                            Remember me
-                        </span>
-                    </label>
+                    <span className="label-text">Se souvenir de moi</span>
+                  </label>
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                    {canResetPassword && (
+                {canResetPassword && (
                         <Link
                             href={route('password.request')}
                             className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -89,12 +106,22 @@ export default function Login({ status, canResetPassword }) {
                             Forgot your password?
                         </Link>
                     )}
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary hover:bg-primary-focus transition-all duration-200"
+                    disabled={data.processing}
+                  >
+                    {data.processing ? (
+                      <>
+                        <span className="loading loading-spinner"></span>
+                        Connexion...
+                      </>
+                    ) : 'Se connecter'}
+                  </button>
                 </div>
+              </div>
             </form>
         </GuestLayout>
     );
 }
+
