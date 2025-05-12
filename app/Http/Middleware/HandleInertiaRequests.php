@@ -53,7 +53,7 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
-            'currency' => config('app.APP_CURRENCY',"USD")//env('APP_CURRENCY', 'USD'),
+            'currency' => config('APP_CURRENCY',"CDF")//env('APP_CURRENCY', 'USD'),
         ];
     }
     protected function getUserData(User $user): array
