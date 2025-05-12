@@ -89,9 +89,9 @@ public function activate(): void
 }
 
 public function isAdmin(): bool
-    {
-        return $this->role->name === 'admin';
-    }
+{
+    return $this->role && $this->role->name === 'admin';
+}
 
     public function isManager(): bool
     {

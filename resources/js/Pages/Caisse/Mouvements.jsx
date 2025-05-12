@@ -4,7 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Pagination from '@/Components/Pagination';
 import toast from 'react-hot-toast';
 
-export default function CaisseMouvements({ caisse, mouvements }) {
+export default function CaisseMouvements({ auth, caisse, mouvements }) {
     const { flash } = usePage().props;
     const [showModal, setShowModal] = useState(false);
     const [formData, setFormData] = useState({

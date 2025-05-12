@@ -11,11 +11,16 @@ import DaisyToast from '@/Components/DaisyToast';
 import CaisseStatus from '@/Components/CaisseStatus';
 
 export default function AuthenticatedLayout({ header, children }) {
-    const user = usePage().props.auth.user;
-    const [showingNavigationDropdown, setShowingNavigationDropdown] =
-        useState(false);
-        const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-        const [notificationsOpen, setNotificationsOpen] = useState(false);
+    const pageProps = usePage().props || {};
+    const user = pageProps.auth?.user || null;
+
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [notificationsOpen, setNotificationsOpen] = useState(false);
+
+    // Debug
+    console.log('Full props:', pageProps);
+    console.log('User data:', user);
+
         return (
             <>
             <Toaster position="top-right" />
@@ -53,7 +58,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     </li>
                     
                     {/* NOUVEAU: Point de vente */}
-                    {user.role=="admin" &&(
+                    {user=="admin" &&(
                         <li>
                         <Link href={route('userStats')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -94,6 +99,8 @@ export default function AuthenticatedLayout({ header, children }) {
                     </li>
                     
                     {/* NOUVEAU: Stocks */}
+                    {user.role === "admin" && (
+
                     <li>
                         <Link href={route('stocks.indexs')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -101,7 +108,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             </svg>
                             Gestion des stocks
                         </Link>
-                    </li>
+                    </li>)}
                     
                     {/* NOUVEAU: Inventaires */}
                     <li>
@@ -188,10 +195,12 @@ export default function AuthenticatedLayout({ header, children }) {
                         </Link>
                     </li>
     
+                    {user.role === "admin" && (
+                        <>
                     <li className="menu-title my-2 text-sm">Rapports & Administration</li>
                     
                     <li>
-                        <Link href={route('reports.index')} className="flex items-center gap-3">
+                        <Link href={route('rapports.index')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                             </svg>
@@ -210,6 +219,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     </li>
                     
                     {/* NOUVEAU: Paramètres */}
+                    </>
+                )}
+
                     <li>
                         <Link href={route('user-settings.edit')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -218,6 +230,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             Paramètres
                         </Link>
                     </li>
+                
                 </ul>
             </nav>
             
@@ -340,7 +353,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Link>
                                 </li>
 
-                                {user.role=="admin" &&(
+                                {user=="admin" &&(
                                     <li>
                                     <Link href={route('userStats')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -373,6 +386,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </li>
                                 
                                 {/* Stocks */}
+                                {user.role === "admin" && (
+
                                 <li>
                                     <Link href={route('stocks.indexs')} className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -380,7 +395,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </svg>
                                         Gestion des stocks
                                     </Link>
-                                </li>
+                                </li>)}
                                 
                                 {/* Inventaires */}
                                 <li>
@@ -406,6 +421,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </li>
                                 
                                 {/* NOUVEAU: Clients */}
+                                {user.role=="admin" &&(
+
                                 <li>
                                     <Link href={route('clients.stats')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -414,7 +431,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Clients
                                     </Link>
                                 </li>
-                                
+                                )}
                                 {/* NOUVEAU: Programme de fidélité *
                                 <li>
                                     <Link href={route('loyalty.index')} className="flex items-center gap-3">
@@ -466,11 +483,12 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Devises
                                     </Link>
                                 </li>
-            
-                                <li className="menu-title my-2 text-sm">Rapports & Administration</li>
-                                
+                                {user.role ==="admin" &&(
+                                    <>
+                                <li className="menu-title my-2 text-sm">Rapports & Administration {user.role }</li>
+                                <p>Role: ""</p>
                                 <li>
-                                    <Link href={route('reports.index')} className="flex items-center gap-3">
+                                    <Link href={route('rapports.index')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z" />
                                         </svg>
@@ -479,6 +497,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </li>
                                 
                                 {/* NOUVEAU: Utilisateurs */}
+                                {user.role==="admin" &&(
+
                                 <li>
                                     <Link href={route('users.index')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -486,8 +506,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </svg>
                                         Utilisateurs
                                     </Link>
-                                </li>
-                                
+                                </li>)}
                                 {/* NOUVEAU: Paramètres */}
                                 <li>
                                     <Link href={route('user-settings.edit')} className="flex items-center gap-3">
@@ -497,6 +516,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Paramètres
                                     </Link>
                                 </li>
+                                </>
+                                )}
                             </ul>
                         </nav>
             
@@ -660,12 +681,12 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-sm btn-ghost btn-circle avatar">
                                 <div className="w-10 h-10 rounded-full overflow-hidden bg-neutral text-neutral-content flex items-center justify-center">
-                                    {user?.photo ? (
-                                        <img src={user.photo} alt="Profil" className="w-full h-full object-cover" />
+                                    {user.user?.photo ? (
+                                        <img src={user.user.photo} alt="Profil" className="w-full h-full object-cover" />
                                     ) : (
                                         <span className="text-sm">
                                             
-                                        {user?.name ? user.name.charAt(0).toUpperCase() : 'JD'}
+                                        {user.user?.name ? user.name.charAt(0).toUpperCase() : 'JD'}
                                         </span>
                                     )}
                                     </div>

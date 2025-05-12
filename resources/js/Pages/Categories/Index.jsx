@@ -62,13 +62,15 @@ export default function CategoriesIndex({ auth, categories, stats }) {
             <div className="container mx-auto px-4 py-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Gestion des catégories</h1>
+                    {auth.role === "admin" && (
+
                     <button 
                         onClick={() => document.getElementById('create_modal').showModal()}
                         className="btn btn-primary"
                     >
                         <PlusIcon className="h-5 w-5 mr-1" />
                         Nouvelle catégorie
-                    </button>
+                    </button>)}
                 </div>
 
                 {/* Statistiques */}
@@ -121,6 +123,8 @@ export default function CategoriesIndex({ auth, categories, stats }) {
                                         </td>
                                         <td>
                                             <div className="flex space-x-2">
+                                            {auth.role === "admin" && (
+
                                             <button
                                                 onClick={() => setEditCategory(category)}
                                                 className="btn btn-sm btn-ghost"
@@ -128,7 +132,9 @@ export default function CategoriesIndex({ auth, categories, stats }) {
 
                                                     <PencilIcon className="h-4 w-4" />
                                                     Modifier
-                                                </button>
+                                                </button>)}
+                                                {auth.role === "admin" && (
+
                                                 <button
                                                     onClick={() => confirmDelete(category)}
                                                     className="btn btn-sm btn-error"
@@ -136,7 +142,7 @@ export default function CategoriesIndex({ auth, categories, stats }) {
                                                 >
                                                     <TrashIcon className="h-4 w-4" />
                                                     Supprimer
-                                                </button>
+                                                </button>)}
                                             </div>
                                         </td>
                                     </tr>

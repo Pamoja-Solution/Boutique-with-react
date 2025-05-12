@@ -99,13 +99,15 @@ export default function InventairesIndex({ auth, inventaires, stats }) {
             <div className="container mx-auto px-4 py-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Gestion des inventaires</h1>
+                    {auth.role === "admin" && (
+
                     <button 
                         onClick={() => document.getElementById('create_modal').showModal()}
                         className="btn btn-primary"
                     >
                         <PlusIcon className="h-5 w-5 mr-1" />
                         Nouvel inventaire
-                    </button>
+                    </button>)}
                 </div>
 
                 {/* Statistiques */}

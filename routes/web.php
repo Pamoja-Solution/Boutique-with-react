@@ -15,6 +15,7 @@ use Inertia\Inertia;
 
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\DeviseController;
+use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\GererClient;
 use App\Http\Controllers\InventaireController;
 use App\Http\Controllers\InventaireItemController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\PointDeVenteController;
 use App\Http\Controllers\PrixProduitController;
 use App\Http\Controllers\ProduitController;
 use App\Http\Controllers\RayonController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMouvementController;
 use App\Http\Controllers\UserController;
@@ -170,8 +172,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::resource('currencies', DeviseController::class);
 Route::put('currencies/restore/{id}', [DeviseController::class,'restore'])->name("currencies.restore")->middleware('can:viewAny,App\Models\User');
 Route::put('currencies/desactivate/{id}',[ DeviseController::class,'desactivate'])->name("currencies.desactivate")->middleware('can:viewAny,App\Models\User');
-Route::resource('reports', InventaireController::class);
+//Route::resource('reports', ReportController::class);
+//Route::post('/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
 Route::resource('users', UserController::class)->middleware('can:viewAny,App\Models\User');
+
+
+Route::middleware(['auth'])->group(function () {
+    // Routes pour les rapports
+    Route::get('/rapports', [App\Http\Controllers\ReportController::class, 'index'])->name('rapports.index');
+    Route::get('/rapports/generer', [App\Http\Controllers\ReportController::class, 'genererRapport'])->name('rapports.generer');
+});
+Route::get('/403', [ErrorController::class, 'forbidden'])->name('403');
 
 Route::get('mes/stats', [UserController::class,'userStats'])->middleware('role:admin,vendeur,gestionnaire')->name("userStats");
 

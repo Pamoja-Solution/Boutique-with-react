@@ -4,7 +4,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { router } from '@inertiajs/react';
 import toast from 'react-hot-toast';
 
-export default function CaisseIndex({ caisses }) {
+export default function CaisseIndex({ auth,caisses }) {
     const { flash } = usePage().props;
 
     React.useEffect(() => {
@@ -25,9 +25,11 @@ export default function CaisseIndex({ caisses }) {
             <div className="container mx-auto px-4 py-8">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Gestion des Caisses</h1>
+                    {auth.role === "admin" && (
+                    
                     <Link href={route('caisses.create')} className="btn btn-primary">
                         Créer une nouvelle caisse
-                    </Link>
+                    </Link>)}
                 </div>
 
                 <div className="overflow-x-auto">
@@ -61,6 +63,9 @@ export default function CaisseIndex({ caisses }) {
                                         </span>
                                     </td>
                                     <td className="flex gap-2">
+                                {auth.role === "admin" && (
+                                    <>
+
                                         <Link 
                                             href={route('caisses.edit', caisse.id)}
                                             className="btn btn-sm btn-info"
@@ -87,6 +92,8 @@ export default function CaisseIndex({ caisses }) {
                                                 Supprimer
                                             </button>
                                         )}
+                                        </>
+                                )}
                                         <Link 
                                             href={route('caisses.mouvements.index', caisse.id)}
                                             className="btn btn-sm btn-neutral"

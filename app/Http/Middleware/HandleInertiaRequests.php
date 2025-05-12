@@ -57,17 +57,23 @@ class HandleInertiaRequests extends Middleware
         ];
     }
     protected function getUserData(User $user): array
-    {
-        return [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'photo' => $user->photo,
-            'role' => $user->role->name,
-            'permissions' => $this->getUserPermissions($user),
-            'is_active' => $user->is_active,
-        ];
+{
+    // Garantit le chargement de la relation
+    if (!$user->relationLoaded('role')) {
+        $user->load('role');
     }
+
+    return [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'photo' => $user->photo,
+        'role' => $user->role?->name, // Null-safe operator
+        'is_admin' => $user->role?->name === 'admin', // Champ explicite
+        'permissions' => $this->getUserPermissions($user),
+        'is_active' => $user->is_active,
+    ];
+}
 
     protected function getUserPermissions(User $user): array
     {
@@ -85,7 +91,7 @@ class HandleInertiaRequests extends Middleware
                 'create' => $user->can('create', Role::class),
             ],
             'products' => [
-                'manage' => in_array($user->role->name, ['admin', 'gestionnaire', 'vendeur']),
+                'manage' => in_array($user->role?->name, ['admin', 'gestionnaire', 'vendeur'] ?? []),
             ],
             'sales' => [
                 'create' => in_array($user->role->name, ['vendeur', 'caissier']),

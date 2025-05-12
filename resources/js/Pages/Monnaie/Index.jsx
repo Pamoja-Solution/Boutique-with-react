@@ -24,8 +24,11 @@ export default function Monnaie({ devises}) {
             
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            {user.role === "admin" && (
+<>
                                     {/* Produits les plus vendus */}
                                     <div className="card bg-base-100 shadow-xl">
+
                                         <div className="card-body">
                                             <h2 className="card-title">Nouvelle Devise </h2>
                                             <span className="text-xs">(les Prix dependent du dollars)</span>
@@ -34,6 +37,8 @@ export default function Monnaie({ devises}) {
                                             </div>
                                         </div>
                                     </div>
+                                    </>
+                                )}
 
                                     {/* Clients fidèles */}
                                     <div className="card bg-base-100 shadow-xl">
