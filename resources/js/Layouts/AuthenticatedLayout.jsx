@@ -13,6 +13,7 @@ import CaisseStatus from '@/Components/CaisseStatus';
 export default function AuthenticatedLayout({ header, children }) {
     const pageProps = usePage().props || {};
     const user = pageProps.auth?.user || null;
+    console.log(pageProps);
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);

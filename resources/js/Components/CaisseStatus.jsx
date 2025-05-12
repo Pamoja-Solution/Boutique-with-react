@@ -25,7 +25,7 @@ export default function CaisseStatus() {
     
     const soldeFormatted = new Intl.NumberFormat('fr-FR', {
         style: 'currency',
-        currency: activeCaisse.devise.symbole,
+        currency:'CDF',
         minimumFractionDigits: 2
     }).format(activeCaisse.solde_actuel);
 
