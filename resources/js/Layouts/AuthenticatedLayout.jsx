@@ -17,10 +17,7 @@ export default function AuthenticatedLayout({ header, children }) {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
 
-    // Debug
-    console.log('Full props:', pageProps);
-    console.log('User data:', user);
-
+    
         return (
             <>
             <Toaster position="top-right" />

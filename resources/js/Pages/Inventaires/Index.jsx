@@ -93,13 +93,13 @@ export default function InventairesIndex({ auth, inventaires, stats }) {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.user}>
             <Head title="Gestion des inventaires" />
             
             <div className="container mx-auto px-4 py-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Gestion des inventaires</h1>
-                    {auth.role === "admin" && (
+                    {auth.user.role === "admin" && (
 
                     <button 
                         onClick={() => document.getElementById('create_modal').showModal()}

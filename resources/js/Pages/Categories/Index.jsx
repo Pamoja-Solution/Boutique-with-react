@@ -56,13 +56,13 @@ export default function CategoriesIndex({ auth, categories, stats }) {
     };
 
     return (
-        <AuthenticatedLayout user={auth.user}>
+        <AuthenticatedLayout user={auth.user.user}>
             <Head title="Gestion des catégories" />
             
             <div className="container mx-auto px-4 py-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold">Gestion des catégories</h1>
-                    {auth.role === "admin" && (
+                    {auth.user.role === "admin" && (
 
                     <button 
                         onClick={() => document.getElementById('create_modal').showModal()}
@@ -123,7 +123,7 @@ export default function CategoriesIndex({ auth, categories, stats }) {
                                         </td>
                                         <td>
                                             <div className="flex space-x-2">
-                                            {auth.role === "admin" && (
+                                            {auth.user.role === "admin" && (
 
                                             <button
                                                 onClick={() => setEditCategory(category)}
@@ -133,7 +133,7 @@ export default function CategoriesIndex({ auth, categories, stats }) {
                                                     <PencilIcon className="h-4 w-4" />
                                                     Modifier
                                                 </button>)}
-                                                {auth.role === "admin" && (
+                                                {auth.user.role === "admin" && (
 
                                                 <button
                                                     onClick={() => confirmDelete(category)}

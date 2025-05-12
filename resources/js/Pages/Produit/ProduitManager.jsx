@@ -26,7 +26,7 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
         prix_gros: '',
         date_effet: new Date().toISOString().split('T')[0]
     });
-
+    //.log(auth.user.user)
     useEffect(() => {
         if (flash.success) {
             toast.success(flash.success);
@@ -171,7 +171,7 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Gestion des produits</h1>
                     <div className="flex gap-2">
-            {auth.role === "admin" && (
+            {auth.user.role == "admin" && (
                         
                         <button 
                             onClick={() => {
@@ -301,7 +301,7 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                                                         </div>
                                                     </td>
                                                     <td>
-                                                    {auth.role === "admin" && (
+                                                    {auth.user.role === "admin" && (
 
                                                         <button 
                                                             onClick={() => openStockManager(produit)}
@@ -311,7 +311,7 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                                                         >
                                                             {totalStock} unités
                                                         </button>)}
-                                                    {auth.role != "admin" && (
+                                                    {auth.user.role != "admin" && (
 
                                                         <button 
                                                             className={`badge ${totalStock <= 0 ? 'badge-error' : 
@@ -327,7 +327,7 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                                                         </span>
                                                     </td>
                                                     <td>
-            {auth.role === "admin" && (
+            {auth.user.role === "admin" && (
 <>
                                                         <div className="relative dropdown dropdown-end">
                                                             <details className="dropdown">
