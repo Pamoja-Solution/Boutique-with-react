@@ -325,15 +325,15 @@ export default function PointDeVente({ rayons, clientsInitiaux, flash }) {
                                 <div className="border-t pt-4 space-y-2">
                                     <div className="flex justify-between text-sm">
                                         <span>Total HT:</span>
-                                        <span>{stats.totalHT.toFixed(2)} FC</span>
+                                        <span>{stats.totalHT.toFixed(2)} CDF</span>
                                     </div>
                                     <div className="flex justify-between text-sm">
                                         <span>TVA:</span>
-                                        <span>{stats.totalTVA.toFixed(2)} FC</span>
+                                        <span>{stats.totalTVA.toFixed(2)} CDF</span>
                                     </div>
                                     <div className="flex justify-between font-semibold text-lg">
                                         <span>Total TTC:</span>
-                                        <span>{stats.totalTTC.toFixed(2)} FC</span>
+                                        <span>{stats.totalTTC.toFixed(2)} CDF</span>
                                     </div>
                                 </div>
                                 

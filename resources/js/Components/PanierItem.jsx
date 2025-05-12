@@ -32,7 +32,7 @@ export default function PanierItem({ item, onRemove, onQuantityChange }) {
             </div>
             
             <div className="col-span-2 text-center">
-                {item.prix_unitaire} FC
+                {item.prix_unitaire} CDF
             </div>
             
             <div className="col-span-2 text-center">
@@ -64,9 +64,9 @@ export default function PanierItem({ item, onRemove, onQuantityChange }) {
             </div>
             
             <div className="col-span-2 text-right font-semibold">
-                 <div className="text-sm">HT :  {item.montant_ht.toFixed(2)} FC</div>
+                 <div className="text-sm">HT :  {item.montant_ht.toFixed(2)} CDF</div>
 
-                <div className="text-xs">TTC : {item.montant_ttc.toFixed(2)} FC</div>
+                <div className="text-xs">TTC : {item.montant_ttc.toFixed(2)} CDF</div>
             </div>
             
             <div className="col-span-1 text-right">

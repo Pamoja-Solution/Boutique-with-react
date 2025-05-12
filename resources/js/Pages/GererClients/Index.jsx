@@ -133,7 +133,7 @@ const filteredClients = useMemo(() => {
     
  // Fonction pour exporter en CSV
  const exportToCSV = () => {
-    const headers = ['Nom', 'Téléphone', 'Email', 'Type', 'Achats', 'Total dépensé (FC)', 'Points'];
+    const headers = ['Nom', 'Téléphone', 'Email', 'Type', 'Achats', 'Total dépensé (CDF)', 'Points'];
     const data = filteredClients.map(client => [
         `"${client.name}"`,
         `"${client.phone || ''}"`,
@@ -165,7 +165,7 @@ const filteredClients = useMemo(() => {
 // Fonction pour exporter en Excel (utilisant la même méthode que CSV pour simplifier)
 const exportToExcel = () => {
     // Préparer les données
-    const headers = ['Nom', 'Téléphone', 'Email', 'Type', 'Achats', 'Total dépensé (FC)', 'Points'];
+    const headers = ['Nom', 'Téléphone', 'Email', 'Type', 'Achats', 'Total dépensé (CDF)', 'Points'];
     const data = filteredClients.map(client => [
         client.name,
         client.phone || '-',
@@ -390,7 +390,7 @@ const paginatedClients = useMemo(() => {
                             </label>
                             <input
                                 type="number"
-                                placeholder="Minimum (FC)"
+                                placeholder="Minimum (CDF)"
                                 className="input input-bordered w-full"
                                 value={filters.minSpent}
                                 onChange={(e) => setFilters({ ...filters, minSpent: e.target.value })}
@@ -403,7 +403,7 @@ const paginatedClients = useMemo(() => {
                             </label>
                             <input
                                 type="number"
-                                placeholder="Maximum (FC)"
+                                placeholder="Maximum (CDF)"
                                 className="input input-bordered w-full"
                                 value={filters.maxSpent}
                                 onChange={(e) => setFilters({ ...filters, maxSpent: e.target.value })}
@@ -491,7 +491,7 @@ const paginatedClients = useMemo(() => {
                                                     </span>
                                                 </td>
                                                 <td>{client.purchases}</td>
-                                                <td>{client.total_spent ? `${client.total_spent} FC` : '-'}</td>
+                                                <td>{client.total_spent ? `${client.total_spent} CDF` : '-'}</td>
                                                 <td>
                                                     <div className="flex space-x-2">
                                                         <button 
@@ -534,7 +534,7 @@ const paginatedClients = useMemo(() => {
                                             <h3 className="font-medium">{customer.name}</h3>
                                             <p className="text-sm text-gray-500">{customer.purchases} achats</p>
                                         </div>
-                                        <span className="font-bold">{customer.total_spent} FC</span>
+                                        <span className="font-bold">{customer.total_spent} CDF</span>
                                     </div>
                                 ))}
                             </div>

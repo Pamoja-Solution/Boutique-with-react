@@ -79,7 +79,7 @@ export default function ClientStats({ stats, chartData, period, clientType }) {
                     <div className="card bg-base-100 shadow">
                         <div className="card-body">
                             <h2 className="card-title text-accent">Chiffre d'Affaires</h2>
-                            <p className="text-3xl font-bold">{stats.chiffre_affaires.toFixed(2)} FC</p>
+                            <p className="text-3xl font-bold">{stats.chiffre_affaires.toFixed(2)} CDF</p>
                         </div>
                     </div>
 
@@ -102,7 +102,7 @@ export default function ClientStats({ stats, chartData, period, clientType }) {
                                         <CartesianGrid strokeDasharray="3 3" />
                                         <XAxis dataKey="date" />
                                         <YAxis />
-                                        <Tooltip formatter={(value) => [`${value} FC`, 'Montant']} />
+                                        <Tooltip formatter={(value) => [`${value} CDF`, 'Montant']} />
                                         <Legend />
                                         <Bar dataKey="total" name="Chiffre d'affaires" fill="#8884d8" />
                                         <Bar dataKey="count" name="Nombre de ventes" fill="#82ca9d" />
@@ -133,7 +133,7 @@ export default function ClientStats({ stats, chartData, period, clientType }) {
                                                 <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                             ))}
                                         </Pie>
-                                        <Tooltip formatter={(value) => [`${value} FC`, 'Montant']} />
+                                        <Tooltip formatter={(value) => [`${value} CDF`, 'Montant']} />
                                         <Legend />
                                     </PieChart>
                                 </ResponsiveContainer>
@@ -170,7 +170,7 @@ export default function ClientStats({ stats, chartData, period, clientType }) {
                                                 </span>
                                             </td>
                                             <td className="text-right">{item.total_ventes}</td>
-                                            <td className="text-right">{item.total_ttc.toFixed(2)} FC</td>
+                                            <td className="text-right">{item.total_ttc.toFixed(2)} CDF</td>
                                             <td className="text-right">
                                                 <Link 
                                                     href={route('clients.stats.show', item.client_id)}

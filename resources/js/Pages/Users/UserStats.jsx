@@ -280,7 +280,7 @@ const date = dateObj.getFullYear() + '-' +
                     <div className="stats bg-secondary text-secondary-content shadow">
                         <div className="stat">
                             <div className="stat-title">Chiffre d'affaires</div>
-                            <div className="stat-value">{filteredStats.totalTTC.toLocaleString('fr-FR')} FC</div>
+                            <div className="stat-value">{filteredStats.totalTTC.toLocaleString('fr-FR')} CDF</div>
                             <div className="stat-desc">TTC</div>
                         </div>
                     </div>
@@ -288,7 +288,7 @@ const date = dateObj.getFullYear() + '-' +
                     <div className="stats bg-accent text-accent-content shadow">
                         <div className="stat">
                             <div className="stat-title">Panier moyen</div>
-                            <div className="stat-value">{filteredStats.avgPanier.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} FC</div>
+                            <div className="stat-value">{filteredStats.avgPanier.toLocaleString('fr-FR', {minimumFractionDigits: 2, maximumFractionDigits: 2})} CDF</div>
                             <div className="stat-desc">Par transaction</div>
                         </div>
                     </div>
@@ -307,7 +307,7 @@ const date = dateObj.getFullYear() + '-' +
                     <div className="stats bg-base-200 shadow">
                         <div className="stat">
                             <div className="stat-title">Montant HT</div>
-                            <div className="stat-value">{filteredStats.totalHT.toLocaleString('fr-FR')} FC</div>
+                            <div className="stat-value">{filteredStats.totalHT.toLocaleString('fr-FR')} CDF</div>
                             <div className="stat-desc">Hors taxes</div>
                         </div>
                     </div>
@@ -315,7 +315,7 @@ const date = dateObj.getFullYear() + '-' +
                     <div className="stats bg-base-200 shadow">
                         <div className="stat">
                             <div className="stat-title">TVA Collectée</div>
-                            <div className="stat-value">{filteredStats.totalTVA.toLocaleString('fr-FR')} FC</div>
+                            <div className="stat-value">{filteredStats.totalTVA.toLocaleString('fr-FR')} CDF</div>
                             <div className="stat-desc">Total TVA</div>
                         </div>
                     </div>
@@ -323,7 +323,7 @@ const date = dateObj.getFullYear() + '-' +
                     <div className="stats bg-base-200 shadow">
                         <div className="stat">
                             <div className="stat-title">Remises accordées</div>
-                            <div className="stat-value">{filteredStats.totalRemise.toLocaleString('fr-FR')} FC</div>
+                            <div className="stat-value">{filteredStats.totalRemise.toLocaleString('fr-FR')} CDF</div>
                             <div className="stat-desc">Total remises</div>
                         </div>
                     </div>
@@ -344,7 +344,7 @@ const date = dateObj.getFullYear() + '-' +
                                         }
                                     }
                                 }}
-                                suffix=" FC"
+                                suffix=" CDF"
                             />
                         </div>
                     </div>
@@ -363,7 +363,7 @@ const date = dateObj.getFullYear() + '-' +
                                             }
                                         }
                                     }}
-                                    suffix=" FC"
+                                    suffix=" CDF"
                                 />
                             ) : (
                                 <div className="h-full flex items-center justify-center text-gray-500">
@@ -392,7 +392,7 @@ const date = dateObj.getFullYear() + '-' +
                                             }
                                         }
                                     }}
-                                    suffix=" FC"
+                                    suffix=" CDF"
                                 />
                             ) : (
                                 <div className="h-full flex items-center justify-center text-gray-500">
@@ -432,14 +432,14 @@ const date = dateObj.getFullYear() + '-' +
                                 <div className="stats bg-error text-error-content">
                                     <div className="stat">
                                         <div className="stat-title">Total Dépenses</div>
-                                        <div className="stat-value">{depenses.reduce((sum, d) => sum + d.montant_converti, 0).toLocaleString('fr-FR')} FC</div>
+                                        <div className="stat-value">{depenses.reduce((sum, d) => sum + d.montant_converti, 0).toLocaleString('fr-FR')} CDF</div>
                                     </div>
                                 </div>
                                 
                                 <div className="stats bg-warning text-warning-content">
                                     <div className="stat">
                                         <div className="stat-title">Moyenne par jour</div>
-                                        <div className="stat-value">{(depenses.reduce((sum, d) => sum + d.montant_converti, 0) / depenses.length).toLocaleString('fr-FR', {maximumFractionDigits: 2})} FC</div>
+                                        <div className="stat-value">{(depenses.reduce((sum, d) => sum + d.montant_converti, 0) / depenses.length).toLocaleString('fr-FR', {maximumFractionDigits: 2})} CDF</div>
                                     </div>
                                 </div>
                                 
@@ -473,7 +473,7 @@ const date = dateObj.getFullYear() + '-' +
                                             <tr key={depense.id}>
                                                 <td>{new Date(depense.date_depense).toLocaleDateString('fr-FR')}</td>
                                                 <td>{depense.description}</td>
-                                                <td>{depense.montant_converti.toLocaleString('fr-FR')} FC</td>
+                                                <td>{depense.montant_converti.toLocaleString('fr-FR')} CDF</td>
                                                 <td>
                                                     <span className="badge badge-outline capitalize">
                                                         {depense.mode_paiement}
@@ -540,7 +540,7 @@ const date = dateObj.getFullYear() + '-' +
                                                 <td>{vente.code}</td>
                                                 <td>{vente.client?.name || 'Non spécifié'}</td>
                                                 <td>{new Date(vente.created_at).toLocaleDateString('fr-FR')}</td>
-                                                <td className="text-right">{vente.total_ttc.toLocaleString('fr-FR')} FC</td>
+                                                <td className="text-right">{vente.total_ttc.toLocaleString('fr-FR')} CDF</td>
                                                 <td>
                                                     <span className={`badge ${
                                                         vente.statut === 'terminee' ? 'badge-success' : 
@@ -575,10 +575,10 @@ const date = dateObj.getFullYear() + '-' +
                                                             <div>
                                                                 <h3 className="font-semibold mb-2">Détails de la vente</h3>
                                                                 <div className="space-y-1">
-                                                                    <p><span className="font-medium">HT:</span> {vente.total_ht.toLocaleString('fr-FR')} FC</p>
-                                                                    <p><span className="font-medium">TVA:</span> {vente.total_tva.toLocaleString('fr-FR')} FC</p>
-                                                                    <p><span className="font-medium">Remise:</span> {vente.montant_remise.toLocaleString('fr-FR')} FC</p>
-                                                                    <p><span className="font-medium">Payé:</span> {vente.montant_paye.toLocaleString('fr-FR')} FC</p>
+                                                                    <p><span className="font-medium">HT:</span> {vente.total_ht.toLocaleString('fr-FR')} CDF</p>
+                                                                    <p><span className="font-medium">TVA:</span> {vente.total_tva.toLocaleString('fr-FR')} CDF</p>
+                                                                    <p><span className="font-medium">Remise:</span> {vente.montant_remise.toLocaleString('fr-FR')} CDF</p>
+                                                                    <p><span className="font-medium">Payé:</span> {vente.montant_paye.toLocaleString('fr-FR')} CDF</p>
                                                                     {vente.notes && <p><span className="font-medium">Notes:</span> {vente.notes}</p>}
                                                                 </div>
                                                             </div>
@@ -600,8 +600,8 @@ const date = dateObj.getFullYear() + '-' +
                                                                                 <tr key={article.id}>
                                                                                     <td>{article.produit?.nom || 'N/A'}</td>
                                                                                     <td>{article.quantite}</td>
-                                                                                    <td>{article.prix_unitaire.toLocaleString('fr-FR')} FC</td>
-                                                                                    <td>{article.montant_ttc.toLocaleString('fr-FR')} FC</td>
+                                                                                    <td>{article.prix_unitaire.toLocaleString('fr-FR')} CDF</td>
+                                                                                    <td>{article.montant_ttc.toLocaleString('fr-FR')} CDF</td>
                                                                                 </tr>
                                                                             ))}
                                                                         </tbody>
@@ -716,7 +716,7 @@ const date = dateObj.getFullYear() + '-' +
                                         <div className="stat">
                                             <div className="stat-title">Valeur totale du stock</div>
                                             <div className="stat-value">{valeurStock.toLocaleString('fr-FR')}
-                                            FC</div>
+                                            CDF</div>
                                         </div>
                                     </div>
                                 </div>

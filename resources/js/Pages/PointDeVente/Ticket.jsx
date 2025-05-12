@@ -51,23 +51,23 @@ export default function Ticket({ vente, entreprise }) {
             <div className="border-t border-b py-2 my-2">
                 <div className="flex justify-between font-medium">
                     <span>Total HT:</span>
-                    <span>{vente.total_ht.toFixed(2)} FC</span>
+                    <span>{vente.total_ht.toFixed(2)} CDF</span>
                 </div>
                 <div className="flex justify-between">
                     <span>TVA:</span>
-                    <span>{vente.total_tva.toFixed(2)} FC</span>
+                    <span>{vente.total_tva.toFixed(2)} CDF</span>
                 </div>
                 <div className="flex justify-between font-bold text-lg">
                     <span>Total TTC:</span>
-                    <span>{vente.total_ttc.toFixed(2)} FC</span>
+                    <span>{vente.total_ttc.toFixed(2)} CDF</span>
                 </div>
                 <div className="flex justify-between">
                     <span>Montant payé:</span>
-                    <span>{vente.montant_paye.toFixed(2)} FC</span>
+                    <span>{vente.montant_paye.toFixed(2)} CDF</span>
                 </div>
                 <div className="flex justify-between font-medium">
                     <span>Monnaie rendue:</span>
-                    <span>{vente.montant_remise.toFixed(2)} FC</span>
+                    <span>{vente.montant_remise.toFixed(2)} CDF</span>
                 </div>
             </div>
 

@@ -291,11 +291,11 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                                                     <td>
                                                         <div className="flex flex-col">
                                                             <span className="font-medium">
-                                                                {dernierPrix ? dernierPrix.prix_detail.toLocaleString('fr-FR') + ' FC' : 'Non défini'}
+                                                                {dernierPrix ? dernierPrix.prix_detail.toLocaleString('fr-FR') + ' CDF' : 'Non défini'}
                                                             </span>
                                                             {dernierPrix && (
                                                                 <span className="text-xs opacity-70">
-                                                                    Marge: {dernierPrix.marge.toLocaleString('fr-FR')} FC
+                                                                    Marge: {dernierPrix.marge.toLocaleString('fr-FR')} CDF
                                                                 </span>
                                                             )}
                                                         </div>
@@ -778,7 +778,7 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                                         onChange={() => {
                                             const { marge, pourcentage } = calculateMarge();
                                             document.getElementById('marge_calc').textContent = 
-                                                `Marge: ${marge.toLocaleString('fr-FR')} FC (${pourcentage}%)`;
+                                                `Marge: ${marge.toLocaleString('fr-FR')} CDF (${pourcentage}%)`;
                                         }}
                                     />
                                 </div>
@@ -798,14 +798,14 @@ export default function ProduitManager({ auth, produits, categories, rayons, pri
                                         onChange={() => {
                                             const { marge, pourcentage } = calculateMarge();
                                             document.getElementById('marge_calc').textContent = 
-                                                `Marge: ${marge.toLocaleString('fr-FR')} FC (${pourcentage}%)`;
+                                                `Marge: ${marge.toLocaleString('fr-FR')} CDF (${pourcentage}%)`;
                                         }}
                                     />
                                 </div>
 
                                 <div className="md:col-span-2">
                                     <div className="text-sm text-info font-medium" id="marge_calc">
-                                        Marge: 0 FC (0%)
+                                        Marge: 0 CDF (0%)
                                     </div>
                                 </div>
 

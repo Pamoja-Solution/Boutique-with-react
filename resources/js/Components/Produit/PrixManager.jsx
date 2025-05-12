@@ -104,7 +104,7 @@ export default function PrixManager({ produit, prixProduits, onClose }) {
                                         onChange={() => {
                                             const { marge, pourcentage } = calculateMarge();
                                             document.getElementById('edit_marge_calc').textContent = 
-                                                `Marge: ${marge.toLocaleString('fr-FR')} FC (${pourcentage}%)`;
+                                                `Marge: ${marge.toLocaleString('fr-FR')} CDF (${pourcentage}%)`;
                                         }}
                                     />
                                 </div>
@@ -124,14 +124,14 @@ export default function PrixManager({ produit, prixProduits, onClose }) {
                                         onChange={() => {
                                             const { marge, pourcentage } = calculateMarge();
                                             document.getElementById('edit_marge_calc').textContent = 
-                                                `Marge: ${marge.toLocaleString('fr-FR')} FC (${pourcentage}%)`;
+                                                `Marge: ${marge.toLocaleString('fr-FR')} CDF (${pourcentage}%)`;
                                         }}
                                     />
                                 </div>
 
                                 <div className="md:col-span-2">
                                     <div className="text-sm text-info font-medium" id="edit_marge_calc">
-                                        Marge: {(editingPrix.prix_detail - editingPrix.prix_achat).toLocaleString('fr-FR')} FC 
+                                        Marge: {(editingPrix.prix_detail - editingPrix.prix_achat).toLocaleString('fr-FR')} CDF 
                                         ({editingPrix.prix_achat > 0 ? ((editingPrix.prix_detail - editingPrix.prix_achat) / editingPrix.prix_achat * 100).toFixed(2) : 0}%)
                                     </div>
                                 </div>
@@ -274,13 +274,13 @@ export default function PrixManager({ produit, prixProduits, onClose }) {
                                         <tr key={prix.id} className="hover">
                                             <td>{dateEffet}</td>
                                             <td>{dateFin}</td>
-                                            <td>{prix.prix_detail.toLocaleString('fr-FR')} FC</td>
-                                            <td>{prix.prix_semi_gros.toLocaleString('fr-FR')} FC</td>
-                                            <td>{prix.prix_gros.toLocaleString('fr-FR')} FC</td>
-                                            <td>{prix.prix_achat.toLocaleString('fr-FR')} FC</td>
+                                            <td>{prix.prix_detail.toLocaleString('fr-FR')} CDF</td>
+                                            <td>{prix.prix_semi_gros.toLocaleString('fr-FR')} CDF</td>
+                                            <td>{prix.prix_gros.toLocaleString('fr-FR')} CDF</td>
+                                            <td>{prix.prix_achat.toLocaleString('fr-FR')} CDF</td>
                                             <td>
                                                 <div className="tooltip" data-tip={`${pourcentageMarge}%`}>
-                                                    {prix.marge.toLocaleString('fr-FR')} FC
+                                                    {prix.marge.toLocaleString('fr-FR')} CDF
                                                 </div>
                                             </td>
                                             <td>

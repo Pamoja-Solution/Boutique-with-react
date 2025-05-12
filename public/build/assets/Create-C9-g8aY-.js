@@ -1,1 +1,0 @@
-import{j as m}from"./app-Dqwb8NiN.js";import i from"./Form-sZpNjO87.js";import"./AuthenticatedLayout-DKlr-RLT.js";import"./Dropdown-CuCFgTtY.js";import"./Actif-DAhVwEZZ.js";import"./index-CC_my2GX.js";function u({auth:r,devises:t,modesPaiement:o}){return m.jsx(i,{auth:r,devises:t,modesPaiement:o})}export{u as default};

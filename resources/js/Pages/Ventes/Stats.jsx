@@ -56,7 +56,7 @@ export default function VenteStats({ stats, chartData, period }) {
                     <div className="card bg-base-100 shadow">
                         <div className="card-body">
                             <h2 className="card-title text-secondary">Chiffre d'Affaires</h2>
-                            <p className="text-4xl font-bold">{stats.total_ttc.toFixed(2)} FC</p>
+                            <p className="text-4xl font-bold">{stats.total_ttc.toFixed(2)} CDF</p>
                             <p className="text-sm text-gray-500">Montant total TTC</p>
                         </div>
                     </div>
@@ -64,7 +64,7 @@ export default function VenteStats({ stats, chartData, period }) {
                     <div className="card bg-base-100 shadow">
                         <div className="card-body">
                             <h2 className="card-title text-accent">Moyenne par Vente</h2>
-                            <p className="text-4xl font-bold">{stats.moyenne_vente ? stats.moyenne_vente.toFixed(2) : '0.00'} FC</p>
+                            <p className="text-4xl font-bold">{stats.moyenne_vente ? stats.moyenne_vente.toFixed(2) : '0.00'} CDF</p>
                             <p className="text-sm text-gray-500">Panier moyen</p>
                         </div>
                     </div>
@@ -89,7 +89,7 @@ export default function VenteStats({ stats, chartData, period }) {
                                       }}
                                             formatter={(value, name) => {
                                                 if (name === 'Chiffre d\'affaires') {
-                                                return [`${value} FC`, name];
+                                                return [`${value} CDF`, name];
                                                 }
                                                 return [value, name];
                                             }}
@@ -132,7 +132,7 @@ export default function VenteStats({ stats, chartData, period }) {
                                         <tr key={item.produit_id}>
                                             <td>{item.produit.nom}</td>
                                             <td className="text-right">{item.total_quantite}</td>
-                                            <td className="text-right">{item.total_ttc.toFixed(2)} FC</td>
+                                            <td className="text-right">{item.total_ttc.toFixed(2)} CDF</td>
                                         </tr>
                                     ))}
                                 </tbody>

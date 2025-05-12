@@ -70,7 +70,7 @@ class ActivitieControllers extends Controller
                 'id' => $vente->id,
                 'type' => 'vente',
                 "client"=>$vente->client,
-                'description' => "Vente #{$vente->code} - Montant: {$vente->total_ttc} FC",
+                'description' => "Vente #{$vente->code} - Montant: {$vente->total_ttc} CDF",
                 'user' => $vente->user->name,
                 'date' => $vente->created_at->diffForHumans(),
                 'color' => "success"

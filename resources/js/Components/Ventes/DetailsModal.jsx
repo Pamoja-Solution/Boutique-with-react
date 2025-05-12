@@ -44,7 +44,7 @@ export default function DetailsModal({ venteId, show, onClose }) {
                                 <p><span className="font-semibold">Date:</span> {new Date(vente?.created_at).toLocaleString()}</p>
                             </div>
                             <div className="space-y-2">
-                                <p><span className="font-semibold">Total:</span> {vente?.montant_total} {props.currency || 'FC'}</p>
+                                <p><span className="font-semibold">Total:</span> {vente?.montant_total} {props.currency || 'CDF'}</p>
                                 <p>
                                     <span className="font-semibold">Statut:</span> 
                                     <span className={`badge ml-2 ${vente?.statut === 'payé' ? 'badge-success' : 'badge-warning'}`}>
@@ -70,9 +70,9 @@ export default function DetailsModal({ venteId, show, onClose }) {
                                         <tr key={article.id}>
                                             <td>{article.produit?.nom}</td>
                                             <td className="text-right">{article.quantite}</td>
-                                            <td className="text-right">{article.prix_unitaire} {props.currency || 'FC'}</td>
+                                            <td className="text-right">{article.prix_unitaire} {props.currency || 'CDF'}</td>
                                             <td className="text-right font-medium">
-                                                {(article.quantite * article.prix_unitaire).toFixed(2)} {props.currency || 'FC'}
+                                                {(article.quantite * article.prix_unitaire).toFixed(2)} {props.currency || 'CDF'}
                                             </td>
                                         </tr>
                                     ))}
@@ -81,7 +81,7 @@ export default function DetailsModal({ venteId, show, onClose }) {
                                     <tr>
                                         <th colSpan="3">Total Général</th>
                                         <th className="text-right">
-                                            {vente?.articles?.reduce((sum, item) => sum + (item.quantite * item.prix_unitaire), 0).toFixed(2)} {props.currency || 'FC'}
+                                            {vente?.articles?.reduce((sum, item) => sum + (item.quantite * item.prix_unitaire), 0).toFixed(2)} {props.currency || 'CDF'}
                                         </th>
                                     </tr>
                                 </tfoot>
