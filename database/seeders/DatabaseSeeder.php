@@ -22,16 +22,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //User::factory(10)->create();
-        //Role::factory(4)->create();
-        //Categorie::factory()->count(8)->create();
-        //Rayon::factory(8)->create();
-        //Produit::factory()->count(50)->create();
-        //PrixProduit::factory()->count(50)->create();
+        User::factory(10)->create();
+        Role::factory(4)->create();
+        Categorie::factory()->count(8)->create();
+        Rayon::factory(8)->create();
+        Produit::factory()->count(50)->create();
+        PrixProduit::factory()->count(50)->create();
         //Stock::factory()->count(50)->create();
         //Client::factory()->count(150)->create();
-        Vente::factory()->count(150)->create();
-        ArticleVente::factory()->count(150)->create();
+        //Vente::factory()->count(150)->create();
+        //ArticleVente::factory()->count(150)->create();
         //PrixProduit::factory()->count(150)->create();
         
     }
