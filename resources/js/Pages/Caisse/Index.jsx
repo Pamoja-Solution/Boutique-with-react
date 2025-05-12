@@ -25,7 +25,7 @@ export default function CaisseIndex({ auth,caisses }) {
             <div className="container mx-auto px-4 py-8">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold">Gestion des Caisses</h1>
-                    {auth.role === "admin" && (
+                    {auth.user.role === "admin" && (
                     
                     <Link href={route('caisses.create')} className="btn btn-primary">
                         Créer une nouvelle caisse
@@ -63,7 +63,7 @@ export default function CaisseIndex({ auth,caisses }) {
                                         </span>
                                     </td>
                                     <td className="flex gap-2">
-                                {auth.role === "admin" && (
+                                {auth.user.role === "admin" && (
                                     <>
 
                                         <Link 
