@@ -7,14 +7,15 @@ import MonnaieActif from '@/Pages/Monnaie/Actif';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
+import DaisyToast from '@/Components/DaisyToast';
+import CaisseStatus from '@/Components/CaisseStatus';
+
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
-
         const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
         const [notificationsOpen, setNotificationsOpen] = useState(false);
-        
         return (
             <>
             <Toaster position="top-right" />
@@ -52,14 +53,16 @@ export default function AuthenticatedLayout({ header, children }) {
                     </li>
                     
                     {/* NOUVEAU: Point de vente */}
-                    <li>
+                    {user.role=="admin" &&(
+                        <li>
                         <Link href={route('userStats')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
                             </svg>
-                            Mes Ventes
+                            Les Ventes
                         </Link>
                     </li>
+                    )}
                     <li>
                         <Link href={route('pos.index')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -167,7 +170,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     
                     {/* NOUVEAU: Dépenses */}
                     <li>
-                        <Link href={route('expenses.index')} className="flex items-center gap-3">
+                        <Link href={route('depenses.index')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clipRule="evenodd" />
                             </svg>
@@ -208,7 +211,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     
                     {/* NOUVEAU: Paramètres */}
                     <li>
-                        <Link href={route('settings.index')} className="flex items-center gap-3">
+                        <Link href={route('user-settings.edit')} className="flex items-center gap-3">
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                 <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
                             </svg>
@@ -337,14 +340,16 @@ export default function AuthenticatedLayout({ header, children }) {
                                     </Link>
                                 </li>
 
-                                <li>
-                                    <Link href={route('userStats')} className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
+                                {user.role=="admin" &&(
+                                    <li>
+                                    <Link href={route('userStats')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z" />
                                         </svg>
-                                        Mes Ventes
+                                        Les Ventes
                                     </Link>
                                 </li>
+                                )}
             
                                 <li className="menu-title my-2 text-sm">Gestion produits</li>
                                 
@@ -444,7 +449,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 
                                 {/* NOUVEAU: Dépenses */}
                                 <li>
-                                    <Link href={route('expenses.index')} className="flex items-center gap-3">
+                                    <Link href={route('depenses.index')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clipRule="evenodd" />
                                         </svg>
@@ -485,7 +490,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 
                                 {/* NOUVEAU: Paramètres */}
                                 <li>
-                                    <Link href={route('settings.index')} className="flex items-center gap-3">
+                                    <Link href={route('user-settings.edit')} className="flex items-center gap-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
                                         </svg>
@@ -560,28 +565,8 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
     
                             {/* NOUVEAU: Statut de la caisse */}
-                            <div className="dropdown dropdown-end hidden md:block">
-                                <button tabIndex={0} className="btn btn-sm btn-ghost gap-2">
-                                    <div className="w-2 h-2 bg-success rounded-full"></div>
-                                    <span>Caisse 1</span>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-                                    </svg>
-                                </button>
-                                <div tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10">
-                                    <div className="p-2">
-                                        <p className="text-xs opacity-70 mb-1">Solde actuel:</p>
-                                        <p className="font-semibold text-lg">245,300 XAF</p>
-                                        <div className="divider my-1"></div>
-                                        <div className="flex flex-col gap-1">
-                                            <button className="btn btn-xs btn-ghost justify-start">Changer de caisse</button>
-                                            <button className="btn btn-xs btn-ghost justify-start">Faire un dépôt</button>
-                                            <button className="btn btn-xs btn-ghost justify-start">Faire un retrait</button>
-                                            <button className="btn btn-xs btn-ghost justify-start">Fermer la caisse</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <CaisseStatus />
+
     
                             {/* Notifications */}
                             <div className="dropdown dropdown-end">
@@ -674,9 +659,17 @@ export default function AuthenticatedLayout({ header, children }) {
                             {/* Menu profil */}
                             <div className="dropdown dropdown-end">
                                 <div tabIndex={0} role="button" className="btn btn-sm btn-ghost btn-circle avatar">
-                                    <div className="w-8 rounded-full bg-neutral text-neutral-content flex items-center justify-center">
-                                        <span className="text-sm">JD</span>
+                                <div className="w-10 h-10 rounded-full overflow-hidden bg-neutral text-neutral-content flex items-center justify-center">
+                                    {user?.photo ? (
+                                        <img src={user.photo} alt="Profil" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <span className="text-sm">
+                                            
+                                        {user?.name ? user.name.charAt(0).toUpperCase() : 'JD'}
+                                        </span>
+                                    )}
                                     </div>
+
                                 </div>
                                 <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                                     <li className="menu-title pb-1">
@@ -686,8 +679,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                         </div>
                                     </li>
                                     <div className="divider my-1"></div>
-                                    <li><Link href={route('profile.edit')}>Profil</Link></li>
-                                    <li><Link href={route('settings')}>Paramètres</Link></li>
+                                    <li><Link href={route('profile.edit')}>Profil </Link></li>
+                                    <li><Link href={route('user-settings.edit')}>Paramètres</Link></li>
                                     <div className="divider my-1"></div>
                                     <li><Link href={route('logout')} method="post" as="button">Déconnexion</Link></li>
                                 </ul>
@@ -723,6 +716,8 @@ export default function AuthenticatedLayout({ header, children }) {
                     </div>
                 </footer>
             </div>
+            <DaisyToast />
+
         </div>
         </>
         );

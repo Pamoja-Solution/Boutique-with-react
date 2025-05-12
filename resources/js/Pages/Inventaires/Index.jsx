@@ -110,28 +110,28 @@ export default function InventairesIndex({ auth, inventaires, stats }) {
 
                 {/* Statistiques */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                    <div className="stats shadow">
+                    <div className="stats shadow-lg">
                         <div className="stat">
                             <div className="stat-title">Total inventaires</div>
                             <div className="stat-value">{stats?.total_inventaires || 0}</div>
                         </div>
                     </div>
                     
-                    <div className="stats shadow">
+                    <div className="stats shadow-lg">
                         <div className="stat">
                             <div className="stat-title">Inventaires terminés</div>
                             <div className="stat-value">{stats?.inventaires_termines || 0}</div>
                         </div>
                     </div>
                     
-                    <div className="stats shadow">
+                    <div className="stats shadow-lg">
                         <div className="stat">
                             <div className="stat-title">En cours</div>
                             <div className="stat-value">{stats?.inventaires_encours || 0}</div>
                         </div>
                     </div>
                     
-                    <div className="stats shadow">
+                    <div className="stats shadow-lg">
                         <div className="stat">
                             <div className="stat-title">Écart cumulé</div>
                             <div className="stat-value text-warning">{stats?.ecart_total || 0}</div>
@@ -141,7 +141,7 @@ export default function InventairesIndex({ auth, inventaires, stats }) {
                 </div>
 
                 {/* Tableau des inventaires */}
-                <div className="bg-base-100 rounded-box shadow overflow-hidden">
+                <div className="bg-base-100 rounded-box shadow-lg overflow-hidden">
                     <div className="overflow-x-auto">
                         <table className="table table-zebra">
                             <thead>

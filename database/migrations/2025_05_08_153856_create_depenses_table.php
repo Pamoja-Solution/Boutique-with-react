@@ -19,8 +19,6 @@ return new class extends Migration
 
             $table->decimal('montant', 10, 2);
             $table->foreignIdFor(Devise::class)->constrained()->cascadeOnDelete();
-            $table->decimal('taux_echange', 10, 4)->nullable();
-            $table->decimal('montant_converti', 10, 2)->nullable(); // Montant dans la devise par défaut
             $table->text('description');
             $table->enum('mode_paiement', ['espece', 'carte', 'cheque', 'mobile_money']);
             $table->string('beneficiaire')->nullable();

@@ -37,4 +37,6 @@ public function prixProduit()
                 ->where('date_fin', null)
                 ->latest('date_effet');
 }
+
+
 }

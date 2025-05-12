@@ -28,7 +28,10 @@ class User extends Authenticatable
     ];
     protected $casts = [
         'is_active' => 'boolean',
+    'settings' => 'array'
+
     ];
+   
 
     /**
      * The attributes that should be hidden for serialization.
@@ -110,4 +113,14 @@ public function isAdmin(): bool
     {
         return in_array($this->role->name, $roles);
     }
+
+    protected $appends = ['photo'];
+
+    public function getPhotoAttribute()
+{
+    if ($this->attributes['photo']) {
+        return config('app.url') . '/storage/' . $this->attributes['photo'];
+    }
+    return null;
+}   
 }

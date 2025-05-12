@@ -3,6 +3,7 @@ import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
+import Trans from '@/Components/Trans';
 import GuestLayout from '@/Layouts/GuestLayout';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
@@ -101,9 +102,9 @@ export default function Login({ status, canResetPassword,flash }) {
                 {canResetPassword && (
                         <Link
                             href={route('password.request')}
-                            className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            className="link me-2"
                         >
-                            Forgot your password?
+                            <Trans id="Forgot your password?"/>
                         </Link>
                     )}
                   <button 

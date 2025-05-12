@@ -3,7 +3,6 @@ import { Head, Link, useForm, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import PrimaryButton from '@/Components/PrimaryButton';
 import DangerButton from '@/Components/DangerButton';
-import SecondaryButton from '@/Components/SecondaryButton';
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
 import TextInput from '@/Components/TextInput';
@@ -13,17 +12,7 @@ export default function UsersIndex({ auth, users, roles }) {
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [currentUser, setCurrentUser] = useState(null);
-    const { put } = useForm();
 
-    const handleDeactivate = (userId) => {
-        if (confirm('Désactiver cet utilisateur ?')) {
-            put(route('users.destroy', userId));
-        }
-    };
-
-    const handleActivate = (userId) => {
-        put(route('users.restore', userId));
-    };
     const createForm = useForm({
         name: '',
         email: '',
@@ -40,6 +29,7 @@ export default function UsersIndex({ auth, users, roles }) {
         password_confirmation: '',
         role_id: '',
         photo: null,
+        _method: 'PUT' // Important pour les mises à jour
     });
 
     const handleCreateSubmit = (e) => {
@@ -55,19 +45,28 @@ export default function UsersIndex({ auth, users, roles }) {
     const handleEditSubmit = (e) => {
         e.preventDefault();
         
-        // Préparer les données pour la mise à jour
-        const formData = {
-            ...editForm.data,
-            // Exclure le mot de passe si vide
-            ...(editForm.data.password === '' ? {
-                password: undefined,
-                password_confirmation: undefined,
-            } : {})
-        };
+        // Créer un FormData et ajouter toutes les données
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('name', editForm.data.name);
+        formData.append('email', editForm.data.email);
+        formData.append('role_id', editForm.data.role_id || '');
+        
+        // Ajouter le mot de passe seulement si fourni
+        if (editForm.data.password) {
+            formData.append('password', editForm.data.password);
+            formData.append('password_confirmation', editForm.data.password_confirmation);
+        }
+        
+        // Ajouter la photo seulement si une nouvelle est fournie
+        if (editForm.data.photo) {
+            formData.append('photo', editForm.data.photo);
+        }
     
-        // Envoyer la requête PUT
+        // Envoyer la requête
         editForm.put(route('users.update', currentUser.id), {
             data: formData,
+            preserveScroll: true,
             onSuccess: () => {
                 setShowEditModal(false);
                 setCurrentUser(null);
@@ -95,11 +94,6 @@ export default function UsersIndex({ auth, users, roles }) {
             photo: null,
         });
         setShowEditModal(true);
-    };
-
-    const openDeleteModal = (user) => {
-        setCurrentUser(user);
-        setShowDeleteModal(true);
     };
 
     return (
@@ -141,7 +135,7 @@ export default function UsersIndex({ auth, users, roles }) {
                                                         {user.photo && (
                                                             <div className="avatar">
                                                                 <div className="w-10 rounded-full">
-                                                                    <img src={`/storage/${user.photo}`} alt={user.name} />
+                                                                    <img src={`${user.photo}`} alt={user.name} />
                                                                 </div>
                                                             </div>
                                                         )}
@@ -153,12 +147,12 @@ export default function UsersIndex({ auth, users, roles }) {
                                                 <td>{user.email}</td>
                                                 <td>{user.role?.name || 'Aucun rôle'}</td>
                                                 <td className="flex gap-2">
-                                                    <button 
-                                                        onClick={() => openEditModal(user)}
+                                                <Link 
+                                                        href={route('users.edit', user.id)}
                                                         className="btn btn-sm btn-ghost"
                                                     >
                                                         Modifier
-                                                    </button>
+                                                    </Link>
                                                     <button 
                                                         onClick={() => openDeleteModal(user)}
                                                         className="btn btn-sm btn-error"
@@ -305,105 +299,7 @@ export default function UsersIndex({ auth, users, roles }) {
                 </div>
             </dialog>
 
-            {/* Modal d'édition */}
-            <dialog open={showEditModal} className="modal">
-                <div className="modal-box">
-                    <h3 className="font-bold text-lg">Modifier l'utilisateur</h3>
-                    <form onSubmit={handleEditSubmit}>
-                        <div className="form-control w-full mb-4">
-                            <InputLabel htmlFor="edit_name" value="Nom complet" />
-                            <TextInput
-                                id="edit_name"
-                                type="text"
-                                className="input input-bordered w-full"
-                                value={editForm.data.name}
-                                onChange={(e) => editForm.setData('name', e.target.value)}
-                                required
-                            />
-                            <InputError message={editForm.errors.name} className="mt-1" />
-                        </div>
-
-                        <div className="form-control w-full mb-4">
-                            <InputLabel htmlFor="edit_email" value="Email" />
-                            <TextInput
-                                id="edit_email"
-                                type="email"
-                                className="input input-bordered w-full"
-                                value={editForm.data.email}
-                                onChange={(e) => editForm.setData('email', e.target.value)}
-                                required
-                            />
-                            <InputError message={editForm.errors.email} className="mt-1" />
-                        </div>
-
-                        <div className="form-control w-full mb-4">
-                            <InputLabel htmlFor="edit_password" value="Nouveau mot de passe (laisser vide pour ne pas changer)" />
-                            <TextInput
-                                id="edit_password"
-                                type="password"
-                                className="input input-bordered w-full"
-                                value={editForm.data.password}
-                                onChange={(e) => editForm.setData('password', e.target.value)}
-                            />
-                            <InputError message={editForm.errors.password} className="mt-1" />
-                        </div>
-
-                        <div className="form-control w-full mb-4">
-                            <InputLabel htmlFor="edit_password_confirmation" value="Confirmation nouveau mot de passe" />
-                            <TextInput
-                                id="edit_password_confirmation"
-                                type="password"
-                                className="input input-bordered w-full"
-                                value={editForm.data.password_confirmation}
-                                onChange={(e) => editForm.setData('password_confirmation', e.target.value)}
-                            />
-                        </div>
-
-                        <div className="form-control w-full mb-4">
-                            <InputLabel htmlFor="edit_role_id" value="Rôle" />
-                            <select
-                                id="edit_role_id"
-                                className="select select-bordered w-full"
-                                value={editForm.data.role_id}
-                                onChange={(e) => editForm.setData('role_id', e.target.value)}
-                            >
-                                <option value="">Sélectionner un rôle</option>
-                                {roles.map((role) => (
-                                    <option key={role.id} value={role.id}>{role.name}</option>
-                                ))}
-                            </select>
-                            <InputError message={editForm.errors.role_id} className="mt-1" />
-                        </div>
-
-                        <div className="form-control w-full mb-6">
-                            <InputLabel htmlFor="edit_photo" value="Photo de profil" />
-                            <input
-                                type="file"
-                                id="edit_photo"
-                                className="file-input file-input-bordered w-full"
-                                onChange={(e) => editForm.setData('photo', e.target.files[0])}
-                            />
-                            <InputError message={editForm.errors.photo} className="mt-1" />
-                        </div>
-
-                        <div className="modal-action">
-                            <button
-                                type="button"
-                                className="btn"
-                                onClick={() => {
-                                    setShowEditModal(false);
-                                    setCurrentUser(null);
-                                }}
-                            >
-                                Annuler
-                            </button>
-                            <PrimaryButton type="submit" disabled={editForm.processing}>
-                                {editForm.processing ? 'Mise à jour...' : 'Mettre à jour'}
-                            </PrimaryButton>
-                        </div>
-                    </form>
-                </div>
-            </dialog>
+            
 
             {/* Modal de suppression */}
             <dialog open={showDeleteModal} className="modal">

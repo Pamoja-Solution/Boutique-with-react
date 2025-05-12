@@ -169,13 +169,12 @@ const date = dateObj.getFullYear() + '-' +
     const exportData = () => {
         router.post(route('stats.export'), { filters });
     };
-
     return (
-        <AuthenticatedLayout user={auth.user}>
-            <Head title="Mes Statistiques" />
+        <AuthenticatedLayout>
+            <Head title="Les Statistiques" />
             
             <div className="container mx-auto px-4 py-8">
-                <h1 className="text-3xl font-bold mb-6">Mes Statistiques de Vente</h1>
+                <h1 className="text-3xl font-bold mb-6">Les Statistiques de Vente</h1>
                 
                 {/* Boutons de période rapide */}
                 <div className="flex flex-wrap gap-2 mb-6">

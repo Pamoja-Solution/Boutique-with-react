@@ -22,4 +22,11 @@ class CaisseMouvement extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function caisse()
+    {
+        return $this->belongsTo(Caisse::class);
+    }
+
+   
 }

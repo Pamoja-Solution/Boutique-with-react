@@ -1,17 +1,21 @@
 <?php
 
+use App\Http\Controllers\ActivitieControllers;
 use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\CaisseMouvementController;
+use App\Http\Controllers\CaisseOperationController;
 use App\Http\Controllers\CategorieController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientStatsController;
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\DeviseController;
+use App\Http\Controllers\GererClient;
 use App\Http\Controllers\InventaireController;
 use App\Http\Controllers\InventaireItemController;
 use App\Http\Controllers\PointDeVenteController;
@@ -21,6 +25,7 @@ use App\Http\Controllers\RayonController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMouvementController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserSettingsController;
 use App\Http\Controllers\VenteController;
 use App\Http\Controllers\VenteStatsController;
 use App\Models\Categorie;
@@ -34,12 +39,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware('role:admin,vendeur')->name('dashboard');
+Route::get('/dashboard',[Dashboard::class, 'index'] )->middleware('role:admin,vendeur,caissier,superviseur')->name('dashboard');
 Route::middleware(['auth', 'verified'])->group(function () {
     // Produits
     Route::resource('produits', ProduitController::class);
+    Route::resource('activities', ActivitieControllers::class)->only("index");
+    Route::resource('ventes', ProduitController::class);
     
     // Prix des produits
     Route::resource('prix-produits', PrixProduitController::class);
@@ -76,6 +81,7 @@ Route::get('/modal-monnaie',[DeviseController::class, 'get'])->name('currencies.
 Route::resource('produits', ProduitController::class);
 Route::post('stock-mouvements', [StockMouvementController::class, 'store']);
 
+Route::resource('gererClients', GererClient::class);
 Route::resource('sales', VenteController::class)->only(['index']);
 Route::resource('pos', PointDeVenteController::class);
 Route::resource('categories', CategorieController::class);
@@ -112,6 +118,27 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::resource('clients', ClientController::class);
 Route::resource('loyalty', InventaireController::class);
 Route::resource('promotions', InventaireController::class);
+// Routes de gestion des caisses
+Route::prefix('caisses')->group(function () {
+    // Changement de caisse active
+    Route::post('/{caisse}/switch', [CaisseController::class, 'switch'])
+        ->name('caisses.switch');
+        
+    // Fermeture de caisse
+    Route::post('/{caisse}/close', [CaisseController::class, 'close'])
+        ->name('caisses.close');
+        
+    // Opérations de caisse
+    Route::post('/depot', [CaisseOperationController::class, 'depot'])
+        ->name('caisses.depot');
+        
+    Route::post('/retrait', [CaisseOperationController::class, 'retrait'])
+        ->name('caisses.retrait');
+        
+    // Historique des opérations (optionnel)
+    Route::get('/historique', [CaisseOperationController::class, 'historique'])
+        ->name('caisses.historique');
+});
 Route::middleware(['auth', 'verified'])->group(function () {
     // Gestion des caisses
     Route::resource('/caisses', CaisseController::class);
@@ -129,7 +156,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('caisses.mouvements.destroy');
 });
 
-Route::resource('expenses', InventaireController::class);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/parametres', [UserSettingsController::class, 'edit'])->name('user-settings.edit');
+    Route::put('/parametres', [UserSettingsController::class, 'update'])->name('user-settings.update');
+});
+
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('depenses', DepenseController::class);
+    Route::get('/depenses/search', [DepenseController::class, 'search'])->name('depenses.search');
+});
 Route::resource('currencies', DeviseController::class);
 Route::put('currencies/restore/{id}', [DeviseController::class,'restore'])->name("currencies.restore")->middleware('can:viewAny,App\Models\User');
 Route::put('currencies/desactivate/{id}',[ DeviseController::class,'desactivate'])->name("currencies.desactivate")->middleware('can:viewAny,App\Models\User');
@@ -157,6 +194,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/point-de-vente/search-clients', [PointDeVenteController::class, 'searchClients'])->name('point-de-vente.search-clients');
     Route::post('/point-de-vente/process', [PointDeVenteController::class, 'processVente'])->name('point-de-vente.process');
     Route::get('/ventes/{id}/ticket', [PointDeVenteController::class, 'generateTicket'])->name('ventes.ticket');
+    Route::get('/laventes/{id}/details', [PointDeVenteController::class, 'venteDetails'])->name('ventes.details');
 });
 
 

@@ -86,4 +86,27 @@ class CaisseController extends Controller
         $action = $caisse->is_active ? 'ouverte' : 'fermée';
         return back()->with('success', "Caisse {$action} avec succès");
     }
+
+    
+
+    public function switch(Caisse $caisse)
+    {
+        // Désactiver toutes les caisses
+        Caisse::where('is_active', true)->update(['is_active' => false]);
+        
+        // Activer la caisse sélectionnée
+        $caisse->update(['is_active' => true]);
+        
+        return redirect()->back()->with('success', 'Caisse changée avec succès');
+    }
+
+    public function close(Caisse $caisse)
+    {
+        $caisse->update(['is_active' => false]);
+        
+        return redirect()->back()->with('success', 'Caisse fermée avec succès');
+    }
+    
+    // Méthodes supplémentaires pour le CRUD complet
+    
 }

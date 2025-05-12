@@ -15,6 +15,7 @@ use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\Rules;
 
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -46,8 +47,11 @@ class UserController extends Controller
         ]);
 
         if ($request->hasFile('photo')) {
+            $path = $request->file('photo')->store('users', 'public');
+
             $user->update([
-                'photo' => $request->file('photo')->store('users', 'public'),
+                'photo' => $path,
+
             ]);
         }
 
@@ -59,10 +63,9 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,'.$user->id,
-            'password' => ['nullable', 'confirmed', Password::defaults()],
-
+            'password' => 'nullable|confirmed|min:8',
             'role_id' => 'nullable|exists:roles,id',
-            'photo' => 'nullable|image|max:2048',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:5120', // 5MB max
         ]);
 
         $data = [
@@ -71,19 +74,34 @@ class UserController extends Controller
             'role_id' => $request->role_id,
         ];
 
-        if ($request->password) {
+        // Mise à jour du mot de passe si fourni
+        if ($request->filled('password')) {
             $data['password'] = Hash::make($request->password);
         }
 
+        // Gestion de la photo seulement si un nouveau fichier est envoyé
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('users', 'public');
+            // Supprimer l'ancienne photo si elle existe
+            if ($user->photo && Storage::exists('public/'.$user->photo)) {
+                Storage::delete('public/'.$user->photo);
+            }
+            
+            // Enregistrer la nouvelle photo
+            $path = $request->file('photo')->store('users', 'public');
+            $data['photo'] = $path;
         }
 
         $user->update($data);
 
-        return redirect()->back()->with('success', 'Utilisateur mis à jour avec succès');
+        return redirect()->route('users.index')->with('success', 'Profil mis à jour avec succès');
     }
-
+    public function edit(User $user)
+{
+    return inertia('Users/EditUser', [
+        'user' => $user,
+        'roles' => Role::all(),
+    ]);
+}
     public function destroy(User $user)
     {
         $user->delete();
@@ -116,8 +134,6 @@ class UserController extends Controller
 
         // Requête pour les ventes
         $ventes = Vente::with(['client', 'articles_vente.produit.categorie', 'articles_vente.rayon'])
-            ->where('user_id', auth()->id())
-            ->whereBetween('created_at', [$dateDebut . ' 00:00:00', $dateFin . ' 23:59:59'])
             ->when($request->has('statut') && $request->statut !== 'tous', fn($q) => $q->where('statut', $request->statut))
             ->when($request->has('search'), fn($q) => $q->where(function($q) use ($request) {
                 $q->where('code', 'like', "%{$request->search}%")
@@ -173,7 +189,6 @@ class UserController extends Controller
             'produitsEnAlerte' => $stocks->where('quantite', '<=', DB::raw('quantite_alerte'))->count(),
             'valeurTotaleStock' => $stocks->sum(fn($s) => $s->quantite * ($s->produit->prix_unitaire ?? 0))
         ];
-
         return Inertia::render('Users/UserStats', [
             'ventes' => $ventes,
             'depenses' => $depenses,

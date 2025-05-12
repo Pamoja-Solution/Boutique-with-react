@@ -2,63 +2,80 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ClientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $clients = Client::query()
+            ->withCount(['ventes as purchases'])
+            ->withSum('ventes as total_spent', 'total_ttc')
+            ->orderByDesc('created_at')
+            ->paginate(10)
+            ->through(fn($c) => [
+                'id' => $c->id,
+                'name' => $c->name,
+                'phone' => $c->phone,
+                'email' => $c->email,
+                'type' => $c->type,
+                'purchases' => $c->purchases,
+                'total_spent' => $c->total_spent,
+                'solde_points' => $c->solde_points,
+            ]);
+
+        $bestCustomers = Client::withCount(['ventes as purchases'])
+            ->withSum('ventes as total_spent', 'total_ttc')
+            ->orderByDesc('total_spent')
+            ->take(5)
+            ->get()
+            ->map(fn($c) => [
+                'name' => $c->name,
+                'purchases' => $c->purchases,
+                'total_spent' => $c->total_spent,
+            ]);
+
+        return Inertia::render('Clients/Index', [
+            'clients' => $clients,
+            'bestCustomers' => $bestCustomers,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string',
+            'type' => 'required|in:occasionnel,regulier,entreprise',
+        ]);
+
+        Client::create($validated);
+
+        return redirect()->back()->with('success', 'Client créé avec succès');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function update(Request $request, Client $client)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string',
+            'type' => 'required|in:occasionnel,regulier,entreprise',
+        ]);
+
+        $client->update($validated);
+
+        return redirect()->back()->with('success', 'Client mis à jour avec succès');
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Client $client)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $client->delete();
+        return redirect()->back()->with('success', 'Client supprimé avec succès');
     }
 }

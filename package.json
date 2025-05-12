@@ -27,8 +27,11 @@
         "chart.js": "^4.4.9",
         "chartjs-adapter-date-fns": "^3.0.0",
         "chartkick": "^5.0.1",
+        "react-chartjs-2": "^5.3.0",
         "react-chartkick": "^0.5.4",
         "react-hot-toast": "^2.5.2",
-        "recharts": "^2.15.3"
+        "react-native-blob-util": "^0.21.2",
+        "recharts": "^2.15.3",
+        "xlsx": "^0.18.5"
     }
 }

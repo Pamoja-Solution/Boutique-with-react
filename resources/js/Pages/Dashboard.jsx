@@ -1,22 +1,41 @@
+import SalesChart from '@/Components/SalesChart';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
 
-export default function Dashboard() {
+export default function Dashboard({ 
+    stats, 
+    recentSales, 
+    topProducts, 
+    bestCustomers, 
+    stockAlerts, 
+    cashierStatus,
+    salesTrend,
+    recentActivities 
+}) {
+    const [timeRange, setTimeRange] = useState('7days');
+    //console.log(salesTrend)
+    // Fonction pour formater les montants
+    const formatCurrency = (total) => {
+        return new Intl.NumberFormat('fr-FR', {
+            style: 'currency',
+            currency: 'CDF',
+            minimumFractionDigits: 0
+        }).format(total).replace('CDF', 'FC');
+    };
+
     return (
         <AuthenticatedLayout
             header={
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                    Dashboard
+                    Tableau de Bord
                 </h2>
             }
         >
-            <Head title="Dashboard" />
+            <Head title="Tableau de Bord" />
 
-            
-
-            {/* NOUVEAU: Zone principale de contenu avec scroll */}
             <div className="flex-1 overflow-y-auto p-4 bg-base-200">
-                {/* AMÉLIORÉ: Tableau de bord avec tuiles */}
+                {/* Statistiques principales */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     {/* Ventes du jour */}
                     <div className="stats shadow bg-base-100">
@@ -28,8 +47,10 @@ export default function Dashboard() {
                                 </svg>
                             </div>
                             <div className="stat-title">Ventes (Aujourd'hui)</div>
-                            <div className="stat-value text-primary">145,290 FC</div>
-                            <div className="stat-desc">↗︎ 12% par rapport à hier</div>
+                            <div className="stat-value text-primary">{formatCurrency(stats.today_sales)}</div>
+                            <div className={`stat-desc ${stats.sales_change >= 0 ? 'text-success' : 'text-error'}`}>
+                                {stats.sales_change >= 0 ? '↗︎' : '↘︎'} {Math.abs(stats.sales_change)}% par rapport à hier
+                            </div>
                         </div>
                     </div>
                     
@@ -43,8 +64,10 @@ export default function Dashboard() {
                                 </svg>
                             </div>
                             <div className="stat-title">Transactions</div>
-                            <div className="stat-value text-secondary">23</div>
-                            <div className="stat-desc">↗︎ 5 de plus qu'hier</div>
+                            <div className="stat-value text-secondary">{stats.today_transactions}</div>
+                            <div className={`stat-desc ${stats.transactions_change >= 0 ? 'text-success' : 'text-error'}`}>
+                                {stats.transactions_change >= 0 ? '↗︎' : '↘︎'} {Math.abs(stats.transactions_change)} de plus qu'hier
+                            </div>
                         </div>
                     </div>
                     
@@ -57,7 +80,7 @@ export default function Dashboard() {
                                 </svg>
                             </div>
                             <div className="stat-title">Stock critique</div>
-                            <div className="stat-value text-warning">7</div>
+                            <div className="stat-value text-warning">{stats.low_stock_items}</div>
                             <div className="stat-desc">Produits à réapprovisionner</div>
                         </div>
                     </div>
@@ -71,13 +94,15 @@ export default function Dashboard() {
                                 </svg>
                             </div>
                             <div className="stat-title">Bénéfice (Aujourd'hui)</div>
-                            <div className="stat-value text-success">43,580 FC</div>
-                            <div className="stat-desc">↗︎ 8% par rapport à hier</div>
+                            <div className="stat-value text-success">{formatCurrency(stats.today_profit)}</div>
+                            <div className={`stat-desc ${stats.profit_change >= 0 ? 'text-success' : 'text-error'}`}>
+                                {stats.profit_change >= 0 ? '↗︎' : '↘︎'} {Math.abs(stats.profit_change)}% par rapport à hier
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                {/* NOUVEAU: Graphiques et données */}
+                {/* Graphiques et données */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
                     {/* Graphique ventes */}
                     <div className="card bg-base-100 shadow-xl lg:col-span-2">
@@ -86,88 +111,83 @@ export default function Dashboard() {
                                 <span>Tendance des ventes</span>
                                 <div className="dropdown dropdown-end">
                                     <div tabIndex={0} role="button" className="btn btn-xs btn-ghost">
-                                        <span>7 derniers jours</span>
+                                        <span>
+                                            {timeRange === '7days' && '7 derniers jours'}
+                                            {timeRange === '30days' && '30 derniers jours'}
+                                            {timeRange === 'year' && 'Cette année'}
+                                        </span>
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                                             <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
                                         </svg>
                                     </div>
                                     <ul tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52 z-10">
-                                        <li><a>7 derniers jours</a></li>
-                                        <li><a>30 derniers jours</a></li>
-                                        <li><a>Cette année</a></li>
+                                        <li><button onClick={() => setTimeRange('7days')}>7 derniers jours</button></li>
+                                        <li><button onClick={() => setTimeRange('30days')}>30 derniers jours</button></li>
+                                        <li><button onClick={() => setTimeRange('year')}>Cette année</button></li>
                                     </ul>
                                 </div>
                             </h2>
                             <div className="h-64 w-full">
-                                {/* Emplacement pour le graphique */}
+                                {/* Graphique réel pourrait être implémenté avec Chart.js */}
                                 <div className="w-full h-full bg-base-200 rounded-lg flex items-center justify-center">
-                                    <span className="text-sm opacity-70">Graphique des ventes ici</span>
+                                <div className="flex justify-center mb-4">
+                                    <div className="btn-group">
+                                    <button
+                                        className={`btn ${timeRange === "7days" ? "btn-primary" : ""}`}
+                                        onClick={() => setTimeRange("7days")}
+                                    >
+                                        7 jours
+                                    </button>
+                                    <button
+                                        className={`btn ${timeRange === "30days" ? "btn-primary" : ""}`}
+                                        onClick={() => setTimeRange("30days")}
+                                    >
+                                        30 jours
+                                    </button>
+                                    <button
+                                        className={`btn ${timeRange === "year" ? "btn-primary" : ""}`}
+                                        onClick={() => setTimeRange("year")}
+                                    >
+                                        Année
+                                    </button>
+                                    </div>
+                                </div>
+
+                                <SalesChart salesTrend={salesTrend} timeRange={timeRange} />
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    {/* NOUVEAU: Activité récente */}
+                    {/* Activité récente */}
                     <div className="card bg-base-100 shadow-xl">
                         <div className="card-body">
                             <h2 className="card-title">Activité récente</h2>
                             <div className="space-y-3 max-h-64 overflow-y-auto">
-                                <div className="flex gap-3 items-start">
-                                    <div className="avatar placeholder">
-                                        <div className="bg-primary text-primary-content w-8 h-8 rounded-full">
-                                            <span className="text-xs">VS</span>
+                                {recentActivities.map((activity, index) => (
+                                    <div key={index} className="flex gap-3 items-start">
+                                        <div className="avatar placeholder">
+                                            <div className={`bg-${activity.color} text-${activity.color}-content w-8 h-8 rounded-full`}>
+                                                <span className="text-xs">{activity.type}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm font-medium">{activity.description}</p>
+                                            <p className="text-xs opacity-70">
+                                                {activity.date} • {activity.user}
+                                            </p>
                                         </div>
                                     </div>
-                                    <div>
-                                        <p className="text-sm font-medium">Vente #1254 complétée</p>
-                                        <p className="text-xs opacity-70">Il y a 10 min • 15,200 FC</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex gap-3 items-start">
-                                    <div className="avatar placeholder">
-                                        <div className="bg-warning text-warning-content w-8 h-8 rounded-full">
-                                            <span className="text-xs">ST</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-medium">Stock faible: Huile végétale</p>
-                                        <p className="text-xs opacity-70">Il y a 25 min • 3 unités restantes</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex gap-3 items-start">
-                                    <div className="avatar placeholder">
-                                        <div className="bg-success text-success-content w-8 h-8 rounded-full">
-                                            <span className="text-xs">CL</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-medium">Nouveau client: Marie Dupont</p>
-                                        <p className="text-xs opacity-70">Il y a 1h • Ajouté au programme fidélité</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex gap-3 items-start">
-                                    <div className="avatar placeholder">
-                                        <div className="bg-error text-error-content w-8 h-8 rounded-full">
-                                            <span className="text-xs">DP</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-medium">Dépense enregistrée</p>
-                                        <p className="text-xs opacity-70">Il y a 2h • Loyer • 75,000 FC</p>
-                                    </div>
-                                </div>
+                                ))}
                             </div>
                             <div className="card-actions justify-end">
-                                <button className="btn btn-sm btn-ghost">Voir tout</button>
+                                <Link href={route('activities.index')} className="btn btn-sm btn-ghost">Voir tout</Link>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* NOUVEAU: Section produits et tableaux */}
+                {/* Section produits et tableaux */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     {/* Produits les plus vendus */}
                     <div className="card bg-base-100 shadow-xl">
@@ -183,28 +203,29 @@ export default function Dashboard() {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Riz blanc 5kg</td>
-                                            <td>42 unités</td>
-                                            <td>84,000 FC</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Huile végétale 1L</td>
-                                            <td>38 unités</td>
-                                            <td>57,000 FC</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Lait en poudre 400g</td>
-                                            <td>25 unités</td>
-                                            <td>45,000 FC</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Savon de ménage</td>
-                                            <td>22 unités</td>
-                                            <td>11,000 FC</td>
-                                        </tr>
+                                        {topProducts.map((product, index) => (
+                                            <tr key={index}>
+                                                <td>
+                                                    <div className="flex items-center gap-2">
+                                                        {product.image && (
+                                                            <div className="avatar">
+                                                                <div className="w-8 h-8 rounded">
+                                                                    <img src={product.image} alt={product.name} />
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                        <span>{product.name}</span>
+                                                    </div>
+                                                </td>
+                                                <td>{product.quantity} unités</td>
+                                                <td>{formatCurrency(product.revenue)}</td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
+                            </div>
+                            <div className="card-actions justify-end mt-2">
+                                <Link href={route('produits.index')} className="btn btn-sm btn-ghost">Voir tous les produits</Link>
                             </div>
                         </div>
                     </div>
@@ -219,117 +240,100 @@ export default function Dashboard() {
                                         <tr>
                                             <th>Client</th>
                                             <th>Achats</th>
-                                            <th>Points fidélité</th>
+                                            <th>Dépenses</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td className="flex items-center gap-2">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-neutral text-neutral-content w-6 h-6 rounded-full">
-                                                        <span className="text-xs">JD</span>
+                                        {bestCustomers.map((customer, index) => (
+                                            <tr key={index}>
+                                                <td className="flex items-center gap-2">
+                                                    <div className="avatar placeholder">
+                                                        <div className="bg-neutral text-neutral-content w-6 h-6 rounded-full">
+                                                            <span className="text-xs">
+                                                                {customer.name.split(' ').map(n => n[0]).join('')}
+                                                            </span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <span>Jean Dupont</span>
-                                            </td>
-                                            <td>15</td>
-                                            <td>450 pts</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="flex items-center gap-2">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-neutral text-neutral-content w-6 h-6 rounded-full">
-                                                        <span className="text-xs">SK</span>
-                                                    </div>
-                                                </div>
-                                                <span>Sarah Kouassi</span>
-                                            </td>
-                                            <td>12</td>
-                                            <td>320 pts</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="flex items-center gap-2">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-neutral text-neutral-content w-6 h-6 rounded-full">
-                                                        <span className="text-xs">PM</span>
-                                                    </div>
-                                                </div>
-                                                <span>Paul Mbarga</span>
-                                            </td>
-                                            <td>8</td>
-                                            <td>240 pts</td>
-                                        </tr>
-                                        <tr>
-                                            <td className="flex items-center gap-2">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-neutral text-neutral-content w-6 h-6 rounded-full">
-                                                        <span className="text-xs">LT</span>
-                                                    </div>
-                                                </div>
-                                                <span>Lucie Togo</span>
-                                            </td>
-                                            <td>7</td>
-                                            <td>180 pts</td>
-                                        </tr>
+                                                    <span>{customer.name}</span>
+                                                </td>
+                                                <td>{customer.purchases} trans.</td>
+                                                <td>{formatCurrency(customer.total_spent)}</td>
+                                            </tr>
+                                        ))}
                                     </tbody>
                                 </table>
+                            </div>
+                            <div className="card-actions justify-end mt-2">
+                                <Link href={route('clients.index')} className="btn btn-sm btn-ghost">Voir tous les clients</Link>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* NOUVEAU: Alertes et informations */}
+                {/* Alertes et informations */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {/* Alertes de stock */}
                     <div className="card bg-base-100 shadow-xl">
                         <div className="card-body">
-                            <h2 className="card-title text-warning flex items-center gap-2">
+                            <h2 className="card-title text-accent flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                                 </svg>
                                 Alertes de stock
                             </h2>
                             <div className="space-y-2 max-h-40 overflow-y-auto">
-                                <div className="flex justify-between items-center p-2 bg-warning bg-opacity-10 rounded-lg">
-                                    <span>Huile végétale 1L</span>
-                                    <span className="badge badge-warning">3 restants</span>
-                                </div>
-                                <div className="flex justify-between items-center p-2 bg-warning bg-opacity-10 rounded-lg">
-                                    <span>Farine de blé 5kg</span>
-                                    <span className="badge badge-warning">5 restants</span>
-                                </div>
-                                <div className="flex justify-between items-center p-2 bg-warning bg-opacity-10 rounded-lg">
-                                    <span>Lait en poudre 400g</span>
-                                    <span className="badge badge-warning">2 restants</span>
-                                </div>
+                                {stockAlerts.length > 0 ? (
+                                    stockAlerts.map((alert, index) => (
+                                        <div key={index} className="flex justify-between items-center p-2 bg-accent bg-opacity-10 rounded-lg">
+                                            <div>
+                                                <span>{alert.product_name}</span>
+                                                <div className="text-xs opacity-70">Rayon: {alert.rayon_name}</div>
+                                            </div>
+                                            <span className="badge badge-accent">{alert.current_quantity} restants</span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-sm opacity-70">
+                                        Aucune alerte de stock pour le moment
+                                    </div>
+                                )}
                             </div>
                             <div className="card-actions justify-end mt-2">
-                                <Link href={route('stocks.low')} className="btn btn-sm btn-warning btn-outline">Gérer les stocks</Link>
+                                <Link href={route('stocks.index')} className="btn btn-sm btn-warning btn-outline">Gérer les stocks</Link>
                             </div>
                         </div>
                     </div>
 
-                    {/* Promotions actives */}
+                    {/* Dernières ventes */}
                     <div className="card bg-base-100 shadow-xl">
                         <div className="card-body">
-                            <h2 className="card-title text-success flex items-center gap-2">
+                            <h2 className="card-title text-primary flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M5 2a2 2 0 00-2 2v14l3.5-2 3.5 2 3.5-2 3.5 2V4a2 2 0 00-2-2H5zm2.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm6.207.293a1 1 0 00-1.414 0l-6 6a1 1 0 101.414 1.414l6-6a1 1 0 000-1.414zM12.5 10a1.5 1.5 0 100 3 1.5 1.5 0 000-3z" clipRule="evenodd" />
+                                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
                                 </svg>
-                                Promotions actives
+                                Dernières ventes
                             </h2>
                             <div className="space-y-2 max-h-40 overflow-y-auto">
-                                <div className="flex justify-between items-center p-2 bg-success bg-opacity-10 rounded-lg">
-                                    <span>Savon -15%</span>
-                                    <span className="badge badge-success">3 jours restants</span>
-                                </div>
-                                <div className="flex justify-between items-center p-2 bg-success bg-opacity-10 rounded-lg">
-                                    <span>2+1 sur produits laitiers</span>
-                                    <span className="badge badge-success">1 jour restant</span>
-                                </div>
+                                {recentSales.length > 0 ? (
+                                    recentSales.map((sale, index) => (
+                                        <div key={index} className="flex justify-between items-center p-2 bg-primary bg-opacity-10 rounded-lg">
+                                            <div>
+                                                <span className="font-medium">Vente #{sale.code}</span>
+                                                <div className="text-xs opacity-70">
+                                                    {new Date(sale.created_at).toLocaleTimeString()} • {sale.client_name || 'Client occasionnel'}
+                                                </div>
+                                            </div>
+                                            <span className="font-medium">{formatCurrency(sale.total_ttc)}</span>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="text-center py-4 text-sm opacity-70">
+                                        Aucune vente récente
+                                    </div>
+                                )}
                             </div>
                             <div className="card-actions justify-end mt-2">
-                                <Link href={route('promotions.index')} className="btn btn-sm btn-success btn-outline">Gérer les promos</Link>
+                                <Link href={route('point-de-vente')} className="btn btn-sm btn-primary">Nouvelle vente</Link>
                             </div>
                         </div>
                     </div>
@@ -344,30 +348,54 @@ export default function Dashboard() {
                                 Statut des caisses
                             </h2>
                             <div className="space-y-2 max-h-40 overflow-y-auto">
-                                <div className="flex justify-between items-center p-2 bg-info bg-opacity-10 rounded-lg">
-                                    <div>
-                                        <span className="font-medium">Caisse principale</span>
-                                        <div className="text-xs opacity-70">Ouverte à 08:15</div>
+                                {cashierStatus.map((caisse, index) => (
+                                    <div key={index} className="flex justify-between items-center p-2 bg-info bg-opacity-10 rounded-lg">
+                                        <div>
+                                            <span className="font-medium">{caisse.name}</span>
+                                            <div className="text-xs opacity-70">
+                                                {caisse.is_active ? `Ouverte à ${caisse.opened_at}` : 'Fermée'} • {caisse.devise_code}
+                                            </div>
+                                        </div>
+                                        <span className="font-medium">
+                                            {formatCurrency(caisse.solde_actuel)}
+                                        </span>
                                     </div>
-                                    <span className="font-medium">245,300 FC</span>
-                                </div>
-                                <div className="flex justify-between items-center p-2 bg-info bg-opacity-10 rounded-lg">
-                                    <div>
-                                        <span className="font-medium">Caisse secondaire</span>
-                                        <div className="text-xs opacity-70">Fermée</div>
-                                    </div>
-                                    <span className="font-medium">0 FC</span>
-                                </div>
+                                ))}
                             </div>
                             <div className="card-actions justify-end mt-2">
-                                <Link href={route('cashregister.index')} className="btn btn-sm btn-info btn-outline">Gérer les caisses</Link>
+                                <Link href={route('caisses.index')} className="btn btn-sm btn-info btn-outline">Gérer les caisses</Link>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            
+                {/* Section rapide pour administrateurs */}
+                <div className="mt-6 card bg-base-100 shadow-xl">
+                    <div className="card-body">
+                        <h2 className="card-title">Actions Rapides</h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                            <Link href={route('point-de-vente')} className="btn btn-sm btn-primary">
+                                Nouvelle Vente
+                            </Link>
+                            <Link href={route('produits.index')} className="btn btn-sm btn-secondary">
+                                Ajouter Produit
+                            </Link>
+                            <Link href={route('gererClients.index')} className="btn btn-sm btn-accent">
+                                Ajouter Client
+                            </Link>
+                            <Link href={route('stocks.indexs')} className="btn btn-sm btn-info">
+                                Ajuster Stock
+                            </Link>
+                            <Link href={route('depenses.index')} className="btn btn-sm btn-warning">
+                                Enregistrer Dépense
+                            </Link>
+                            <Link href={route('inventaires.index')} className="btn btn-sm btn-success">
+                                Nouvel Inventaire
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </AuthenticatedLayout>
     );
 }

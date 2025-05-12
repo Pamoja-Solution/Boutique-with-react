@@ -299,4 +299,39 @@ class PointDeVenteController extends Controller
             ]
         ]);
     }
+
+
+    public function venteDetails($id)
+{
+    $vente = Vente::with([
+        'client', 
+        'articles.produit', 
+        'articles.rayon',
+        'user'
+    ])->findOrFail($id);
+    return response()->json([
+        'vente' => [
+            'id' => $vente->id,
+            'code' => $vente->code,
+            'montant_total' => $vente->total_ttc,
+            'statut' => $vente->statut,
+            'created_at' => $vente->created_at,
+            'client' => $vente->client,
+            'articles' => $vente->articles->map(function ($article) {
+                return [
+                    'id' => $article->id,
+                    'quantite' => $article->quantite,
+                    'prix_unitaire' => $article->prix_unitaire,
+                    'produit' => $article->produit,
+                ];
+            }),
+        ],
+    ]);
+}
+
+    // app/Http/Controllers/VenteController.php
+public function details($id)
+{
+    
+}
 }

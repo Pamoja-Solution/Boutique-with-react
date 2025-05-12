@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Depense;
 use App\Models\User;
+use App\Policies\DepensePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Vite;
@@ -15,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
+        Depense::class => DepensePolicy::class,
         // Ajoutez d'autres modèles/policies ici
     ];
     public function register(): void

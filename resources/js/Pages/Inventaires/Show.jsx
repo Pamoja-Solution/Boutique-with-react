@@ -122,7 +122,7 @@ export default function InventaireShow({ auth, inventaire, produits, rayons }) {
                 </div>
                 
                 {/* Informations générales */}
-                <div className="bg-base-100 rounded-box shadow p-6 mb-6">
+                <div className="bg-base-100 rounded-box shadow-lg p-6 mb-6">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
                             <h3 className="text-lg font-medium">Détails</h3>
@@ -145,7 +145,7 @@ export default function InventaireShow({ auth, inventaire, produits, rayons }) {
                 </div>
                 
                 {inventaire.items?.length ? (
-                    <div className="bg-base-100 rounded-box shadow overflow-hidden mb-6">
+                    <div className="bg-base-100 rounded-box shadow-lg overflow-hidden mb-6">
                         <div className="overflow-x-auto">
                             <table className="table table-zebra">
                                 <thead>

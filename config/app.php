@@ -12,6 +12,7 @@ return [
     | other UI elements where an application name needs to be displayed.
     |
     */
+'currency' => env('APP_CURRENCY', 'USD'),
 
     'name' => env('APP_NAME', 'Laravel'),
 

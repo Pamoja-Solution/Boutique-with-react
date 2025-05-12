@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\Builder;
 class Vente extends Model
 {
     //
@@ -54,8 +55,10 @@ public function paiements()
 {
     return $this->hasMany(Paiement::class);
 }
-
-// Vente.php (modèle Eloquent)
+public function scopeToday(Builder $query)
+{
+    return $query->whereDate('created_at', Carbon::today());
+}
 public function scopeFilter($query, $filters)
 {
     return $query
@@ -78,4 +81,35 @@ public function articles_vente()
 {
     return $this->hasMany(ArticleVente::class); // adapte le nom de la classe si besoin
 }
+
+
+public function categorie()
+    {
+        return $this->belongsTo(Categorie::class);
+    }
+
+    public function prixProduits()
+    {
+        return $this->hasMany(PrixProduit::class);
+    }
+
+    public function produit()
+    {
+        return $this->belongsTo(Produit::class);
+    }
+
+    public function stocks()
+    {
+        return $this->hasMany(Stock::class);
+    }
+
+    public function mouvementsStock()
+    {
+        return $this->hasMany(StockMouvement::class);
+    }
+
+    public function articlesVente()
+    {
+        return $this->hasMany(ArticleVente::class);
+    }
 }

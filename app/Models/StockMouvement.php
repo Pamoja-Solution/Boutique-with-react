@@ -17,4 +17,17 @@ class StockMouvement extends Model
         'motif',
         'user_id',
     ];
+    public function produit()
+    {
+        return $this->belongsTo(Produit::class);
+    }
+    public function rayon()
+    {
+        return $this->belongsTo(Rayon::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }
