@@ -21,7 +21,7 @@ export default function Dashboard({
             style: 'currency',
             currency: 'CDF',
             minimumFractionDigits: 0
-        }).format(total).replace('CDF', 'FC');
+        }).format(total).replace('CDF', 'USD');
     };
 
     return (
