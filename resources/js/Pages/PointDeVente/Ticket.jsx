@@ -8,6 +8,11 @@ export default function Ticket({ vente, entreprise }) {
             
             <div className="text-center mb-4">
                 <h1 className="text-xl font-bold">{entreprise.nom}</h1>
+                <figure>
+                <img
+                  src={entreprise.logo}
+                  alt="Shoes" />
+              </figure>
                 <p className="text-sm">{entreprise.adresse}</p>
                 <p className="text-sm">{entreprise.telephone}</p>
             </div>

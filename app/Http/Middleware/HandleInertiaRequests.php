@@ -52,7 +52,15 @@ class HandleInertiaRequests extends Middleware
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
-            ],
+            ], 
+            'notifications' => [function () use ($request) {
+                if (!$request->user()) return null;
+                
+                return [
+                    'data' => $request->user()->notifications()->latest()->take(5)->get(),
+                    'unread_count' => $request->user()->unreadNotifications()->count()
+                ];
+            }],
             'currency' => config('APP_CURRENCY',"CDF")//env('APP_CURRENCY', 'USD'),
         ];
     }

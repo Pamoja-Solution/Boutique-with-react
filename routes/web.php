@@ -19,6 +19,7 @@ use App\Http\Controllers\ErrorController;
 use App\Http\Controllers\GererClient;
 use App\Http\Controllers\InventaireController;
 use App\Http\Controllers\InventaireItemController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PointDeVenteController;
 use App\Http\Controllers\PrixProduitController;
 use App\Http\Controllers\ProduitController;
@@ -61,7 +62,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('stock-mouvements/rayon/{rayon}', [StockMouvementController::class, 'index'])->name('stock-mouvements.rayon');
 });
 
-
+Route::middleware('auth')->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/count', [NotificationController::class, 'getUnreadCount'])->name('notifications.count');
+    Route::get('/notifications/latest', [NotificationController::class, 'getLatest'])->name('notifications.latest');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+});
 Route::middleware(['auth', 'verified'])->group(function () {
     // Route pour afficher le gestionnaire de stocks
     Route::get('/stocks', [StockController::class, 'index'])->name('stocks.indexs');

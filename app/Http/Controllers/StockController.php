@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LowStockAlert;
 use App\Models\Produit;
 use App\Models\Rayon;
 use App\Models\Stock;
@@ -52,6 +53,11 @@ class StockController extends Controller
         $stockSource->quantite -= $request->quantite;
         $stockSource->save();
 
+        
+
+        if ($stockSource->quantite <= $stockSource->quantite_alerte) {
+        event(new LowStockAlert($stockSource, $stockSource));
+        }
         // Enregistrer le mouvement de sortie
         StockMouvement::create([
             'produit_id' => $request->produit_id,

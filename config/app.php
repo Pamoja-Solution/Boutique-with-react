@@ -14,8 +14,11 @@ return [
     */
 'currency' => env('APP_CURRENCY', 'USD'),
 
-    'name' => env('APP_NAME', 'Laravel'),
-
+    'name' => env('APP_NAME', 'Boutiques Pour Tous'),
+"logo"=>"/images/default-avatar.png",
+"adresse"=>'Kinshasa, Av; INSKD N°23, Q.LDEIE, C.MONT - DEDEED',
+            'telephone' => "09736534536",
+            'email' =>  'contact@example.com',
     /*
     |--------------------------------------------------------------------------
     | Application Environment

@@ -1,12 +1,15 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Events\VenteCompleted;
 use App\Models\{Produit, Client, Vente, ArticleVente, Stock, Rayon};
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class PointDeVenteController extends Controller
 {
@@ -255,15 +258,21 @@ class PointDeVenteController extends Controller
                 return $vente;
             });
                 
-            
+            event(new VenteCompleted($vente));
+
             // Retourner la réponse via Inertia
-            return Inertia::render('PointDeVente/Index', [
+            /*return Inertia::render('PointDeVente/Index', [
                 'vente' => $vente->load('articles.produit', 'client'),
                 'flash' => [
                     'message' => 'Vente enregistrée avec succès'
                 ],
                 
-            ]);
+            ]);*/
+            return back()->with([
+                'vente' => $vente->load('articles.produit', 'client'),
+                'flash' => [
+                    'message' => 'Vente enregistrée avec succès'
+                ]]);
             
         } catch (\Exception $e) {
             return Inertia::render('PointDeVente/Index', [
@@ -277,28 +286,44 @@ class PointDeVenteController extends Controller
     /**
      * Générer le ticket de caisse
      */
-    public function generateTicket($id)
-    {
-        $vente = Vente::with([
-            'client', 
-            'articles.produit', 
-            'articles.rayon',
-            'user'
-        ])->findOrFail($id);
-        //dd($vente);
-        
-        return Inertia::render('PointDeVente/Ticket', [
-            'vente' => $vente,
-            'entreprise' => [
-                'nom' => config('app.name'),
-                'adresse' => config('app.adresse', '123 Rue du Commerce'),
-                'telephone' => config('app.telephone', '+1234567890'),
-                'email' => config('app.email', 'contact@example.com'),
-                'site_web' => config('app.url'),
-                'logo' => config('app.logo')
-            ]
-        ]);
-    }
+
+     public function generateTicket($id)
+     {
+         $vente = Vente::with([
+             'client', 
+             'articles.produit', 
+             'articles.rayon',
+             'user'
+         ])->findOrFail($id);
+     
+         // Configuration de l'entreprise avec vérification du logo
+         $logoPath = config('app.logo');
+         $entreprise = [
+             'nom' => config('app.name'),
+             'adresse' => config('app.adresse', '123 Rue du Commerce'),
+             'telephone' => config('app.telephone', '+1234567890'),
+             'email' => config('app.email', 'contact@example.com'),
+             'site_web' => config('app.url'),
+             'logo' => file_exists(public_path($logoPath)) ? $logoPath : null
+         ];
+     
+         // Options PDF
+         $pdfOptions = [
+             'isRemoteEnabled' => true,
+             'chroot' => public_path(),
+             'defaultFont' => 'sans-serif',
+             'isHtml5ParserEnabled' => true
+         ];
+     
+         // Génération du PDF
+         return Pdf::loadView('pdf.ticket', [
+                 'vente' => $vente,
+                 'entreprise' => $entreprise
+             ])
+             ->setOptions($pdfOptions)
+             ->setPaper([0, 0, 226.77, 600], 'portrait')
+             ->stream('ticket-'.$vente->id.'.pdf');
+     }
 
 
     public function venteDetails($id)

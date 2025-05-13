@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Models\Depense;
+use App\Models\Stock;
 use App\Models\User;
+use App\Observers\StockObserver;
 use App\Policies\DepensePolicy;
 use App\Policies\UserPolicy;
 use Illuminate\Support\Facades\Gate;
@@ -36,5 +38,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('access-dashboard', fn (User $user) => $user->isAdminOrManager());
         Gate::define('manage-products', fn (User $user) => $user->canManageProducts());
         Vite::prefetch(concurrency: 3);
+        Stock::observe(StockObserver::class);
+
     }
 }

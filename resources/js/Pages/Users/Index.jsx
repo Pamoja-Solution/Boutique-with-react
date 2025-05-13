@@ -41,6 +41,10 @@ export default function UsersIndex({ auth, users, roles }) {
             },
         });
     };
+    const openDeleteModal = (user) => {
+        setCurrentUser(user);
+        setShowDeleteModal(true);
+    };
 
     const handleEditSubmit = (e) => {
         e.preventDefault();

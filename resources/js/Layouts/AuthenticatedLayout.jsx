@@ -1,19 +1,14 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import Dropdown from '@/Components/Dropdown';
-import DevisesForm from '@/Components/LesForms/Devise';
-import NavLink from '@/Components/NavLink';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import MonnaieActif from '@/Pages/Monnaie/Actif';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import { Toaster } from 'react-hot-toast';
 import DaisyToast from '@/Components/DaisyToast';
 import CaisseStatus from '@/Components/CaisseStatus';
+import NotificationsDropdown from '@/Components/NotificationsDropdown';
 
 export default function AuthenticatedLayout({ header, children }) {
     const pageProps = usePage().props || {};
     const user = pageProps.auth?.user || null;
-    console.log(pageProps);
 
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -562,7 +557,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </Link>
                             </div>
                             
-                            {/* Recherche */}
+                            {/* Recherche 
                             <div className="md:block hidden">
                                 
                                 <label className="input w-48">
@@ -582,81 +577,14 @@ export default function AuthenticatedLayout({ header, children }) {
                                     <input type="search" className='input' required placeholder="Rechercher..." />
                                     </label>
                             </div>
-    
+    */}
                             {/* NOUVEAU: Statut de la caisse */}
                             <CaisseStatus />
 
     
                             {/* Notifications */}
-                            <div className="dropdown dropdown-end">
-                                <button tabIndex={0} className="btn btn-sm btn-ghost btn-circle">
-                                    <div className="indicator">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                                        </svg>
-                                        <span className="badge badge-xs badge-primary indicator-item">3</span>
-                                    </div>
-                                </button>
-                                <div tabIndex={0} className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-72 z-10">
-                                    <div className="p-2">
-                                        <h3 className="font-semibold mb-2">Notifications</h3>
-                                        <div className="divider my-1"></div>
-                                        
-                                        <div className="space-y-2 max-h-60 overflow-y-auto">
-                                            <div className="flex gap-3 p-2 hover:bg-base-200 rounded-lg">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-red-100 text-red-600 w-8 h-8 rounded-full">
-                                                        <span>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                                                            </svg>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm">Stock faible: <span className="font-medium">Lait en poudre</span></p>
-                                                    <p className="text-xs opacity-70">Il y a 5 minutes</p>
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="flex gap-3 p-2 hover:bg-base-200 rounded-lg">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-green-100 text-green-600 w-8 h-8 rounded-full">
-                                                        <span>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                                            </svg>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm">Vente <span className="font-medium">#1234</span> effectuée</p>
-                                                    <p className="text-xs opacity-70">Il y a 30 minutes</p>
-                                                </div>
-                                            </div>
-                                            
-                                            <div className="flex gap-3 p-2 hover:bg-base-200 rounded-lg">
-                                                <div className="avatar placeholder">
-                                                    <div className="bg-blue-100 text-blue-600 w-8 h-8 rounded-full">
-                                                        <span>
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z" />
-                                                            </svg>
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <p className="text-sm">Nouveau client ajouté</p>
-                                                    <p className="text-xs opacity-70">Aujourd'hui, 10:30</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div className="divider my-1"></div>
-                                        <button className="btn btn-sm btn-ghost w-full">Voir toutes les notifications</button>
-                                    </div>
-                                </div>
-                            </div>
+                            <NotificationsDropdown />
+
     
                             {/* NOUVEAU: Menu Aide Rapide */}
                             <div className="dropdown dropdown-end hidden md:block">

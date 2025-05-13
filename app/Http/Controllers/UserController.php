@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use App\Models\Depense;
 use App\Models\User;
 use App\Models\Role;
@@ -16,6 +17,7 @@ use Illuminate\Validation\Rules;
 
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -42,6 +44,12 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'settings' => [
+                'theme' => 'dark',
+                'font' => 'comfortaa',
+                'compact_mode' => true,
+                'notifications' => true,
+            ],
             'password' => Hash::make($request->password),
             'role_id' => $request->role_id,
         ]);
@@ -54,6 +62,7 @@ class UserController extends Controller
 
             ]);
         }
+        event(new UserRegistered($user));
 
         return redirect()->back()->with('success', 'Utilisateur créé avec succès');
     }
@@ -104,7 +113,12 @@ class UserController extends Controller
 }
     public function destroy(User $user)
     {
-        $user->delete();
+        try{
+            $user->delete();
+        }catch(Throwable $e){
+            return redirect()->back()->with('error', 'Cet Utilisateur contiens de données non supprimable il serait mieux de le desactiver');
+
+        }
         return redirect()->back()->with('success', 'Utilisateur supprimé avec succès');
     }
 

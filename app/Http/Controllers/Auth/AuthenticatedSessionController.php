@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Events\UserLoggedIn;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
@@ -45,6 +46,7 @@ class AuthenticatedSessionController extends Controller
         }
 
         $request->session()->regenerate();
+        event(new UserLoggedIn(auth()->user()));
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
