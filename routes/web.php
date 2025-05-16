@@ -29,6 +29,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMouvementController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\VendeurStatsController;
 use App\Http\Controllers\VenteController;
 use App\Http\Controllers\VenteStatsController;
 use App\Models\Categorie;
@@ -203,7 +204,10 @@ Route::get('/stocks-low', function () {
     return redirect()->route('dashboard'); // ou view('welcome') si page d'accueil
 })->name('stocks.low');
 
-
+Route::group(['middleware' => ['auth', 'verified']], function() {
+    Route::get('/stats/vendeurs', [VendeurStatsController::class, 'index'])->name('stats.vendeurs');
+    Route::get('/stats/vendeurs/{vendeur}/ventes', [VendeurStatsController::class, 'getVentes'])->name('stats.vendeurs.ventes');
+});
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Point de vente
