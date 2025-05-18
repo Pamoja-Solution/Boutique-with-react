@@ -1,1 +1,0 @@
-import{j as s}from"./app-X5azK6az.js";function m({className:n="",disabled:t,children:o,...r}){return s.jsx("button",{...r,className:`btn btn-secondary ${t&&"opacity-25"} `+n,disabled:t,children:o})}export{m as P};
