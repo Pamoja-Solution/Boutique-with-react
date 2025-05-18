@@ -29,6 +29,7 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\StockMouvementController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserSettingsController;
+use App\Http\Controllers\VendeurStats;
 use App\Http\Controllers\VendeurStatsController;
 use App\Http\Controllers\VenteController;
 use App\Http\Controllers\VenteStatsController;
@@ -213,6 +214,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Point de vente
     
     Route::get('/point-de-vente', [PointDeVenteController::class, 'index'])->name('point-de-vente');
+    Route::get('/vendeurs-stats', [VendeurStats::class, 'index'])->name('vendeurs-stats');
     Route::get('/point-de-vente/search-produits', [PointDeVenteController::class, 'searchProduits'])->name('point-de-vente.search-produits');
     Route::get('/point-de-vente/search-clients', [PointDeVenteController::class, 'searchClients'])->name('point-de-vente.search-clients');
     Route::post('/point-de-vente/process', [PointDeVenteController::class, 'processVente'])->name('point-de-vente.process');
