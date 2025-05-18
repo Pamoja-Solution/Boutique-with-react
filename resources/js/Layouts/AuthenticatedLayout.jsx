@@ -50,7 +50,10 @@ export default function AuthenticatedLayout({ header, children }) {
                         </Link>
                     </li>
 
+                    {user.role === "admin" && (
+
                     <li>
+
                         <Link href={route('vendeurs-stats')} className="flex items-center gap-3">
                             
                             <svg className="w-6 h-6 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -60,7 +63,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             Vendeur
                         </Link>
                     </li>
-                    
+                    )}
                     {/* NOUVEAU: Point de vente */}
                     {user=="admin" &&(
                         <li>
@@ -355,6 +358,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Tableau de bord
                                     </Link>
                                 </li>
+                    {user.role === "admin" && (
+
                                 <li>
                                     <Link href={route('vendeurs-stats')} className="flex items-center gap-3">
                                         
@@ -365,7 +370,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                         Vendeur
                                     </Link>
                                 </li>
-                                
+                    )}
                                 {/* Point de vente */}
                                 <li>
                                     <Link href={route('pos.index')} className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>

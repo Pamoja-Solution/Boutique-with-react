@@ -13,21 +13,22 @@ class VendeurStats extends Controller
 {
     public function index(Request $request)
     {
-       
-        $now = now();
+        $startDate = $request->input('start_date', now()->toDateString());
+        $endDate = $request->input('end_date', now()->toDateString());
+        
         $dbDriver = config('database.default');
         
         // Fonctions de date adaptées au driver de base de données
         if ($dbDriver === 'sqlite') {
-            // Statistiques quotidiennes (SQLite)
-            $ventesQuotidiennes = Vente::select([
+            // Statistiques par période (SQLite)
+            $ventesPeriod = Vente::select([
                     'user_id',
                     DB::raw('date(created_at) as date'),
                     DB::raw('SUM(total_ttc) as total_ventes'),
                     DB::raw('COUNT(*) as nombre_ventes')
                 ])
                 ->where('statut', 'terminee')
-                ->whereDate('created_at', $now->toDateString())
+                ->whereBetween('created_at', [$startDate, Carbon::parse($endDate)->endOfDay()])
                 ->groupBy('user_id', 'date')
                 ->orderBy('total_ventes', 'desc')
                 ->with('user')
@@ -42,8 +43,8 @@ class VendeurStats extends Controller
                     DB::raw('COUNT(*) as nombre_ventes')
                 ])
                 ->where('statut', 'terminee')
-                ->whereMonth('created_at', $now->month)
-                ->whereYear('created_at', $now->year)
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
                 ->groupBy('user_id', 'mois', 'annee')
                 ->orderBy('total_ventes', 'desc')
                 ->with('user')
@@ -57,22 +58,22 @@ class VendeurStats extends Controller
                     DB::raw('COUNT(*) as nombre_ventes')
                 ])
                 ->where('statut', 'terminee')
-                ->whereYear('created_at', $now->year)
+                ->whereYear('created_at', now()->year)
                 ->groupBy('user_id', 'annee')
                 ->orderBy('total_ventes', 'desc')
                 ->with('user')
                 ->get();
         } else {
             // Version MySQL/MariaDB
-            // Statistiques quotidiennes
-            $ventesQuotidiennes = Vente::select([
+            // Statistiques par période
+            $ventesPeriod = Vente::select([
                     'user_id',
                     DB::raw('DATE(created_at) as date'),
                     DB::raw('SUM(total_ttc) as total_ventes'),
                     DB::raw('COUNT(*) as nombre_ventes')
                 ])
                 ->where('statut', 'terminee')
-                ->whereDate('created_at', $now->toDateString())
+                ->whereBetween('created_at', [$startDate, Carbon::parse($endDate)->endOfDay()])
                 ->groupBy('user_id', 'date')
                 ->orderBy('total_ventes', 'desc')
                 ->with('user')
@@ -87,8 +88,8 @@ class VendeurStats extends Controller
                     DB::raw('COUNT(*) as nombre_ventes')
                 ])
                 ->where('statut', 'terminee')
-                ->whereMonth('created_at', $now->month)
-                ->whereYear('created_at', $now->year)
+                ->whereMonth('created_at', now()->month)
+                ->whereYear('created_at', now()->year)
                 ->groupBy('user_id', 'mois', 'annee')
                 ->orderBy('total_ventes', 'desc')
                 ->with('user')
@@ -102,18 +103,21 @@ class VendeurStats extends Controller
                     DB::raw('COUNT(*) as nombre_ventes')
                 ])
                 ->where('statut', 'terminee')
-                ->whereYear('created_at', $now->year)
+                ->whereYear('created_at', now()->year)
                 ->groupBy('user_id', 'annee')
                 ->orderBy('total_ventes', 'desc')
                 ->with('user')
                 ->get();
-
-                
         }
+
         return Inertia::render('Vendeurs/Stats', [
-            'quotidiennes' => $ventesQuotidiennes,
+            'period' => $ventesPeriod,
             'mensuelles' => $ventesMensuelles,
             'annuelles' => $ventesAnnuelles,
+            'filters' => [
+                'start_date' => $startDate,
+                'end_date' => $endDate,
+            ],
         ]);
     }
 }
