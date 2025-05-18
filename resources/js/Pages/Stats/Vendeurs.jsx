@@ -76,22 +76,27 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
 
     return (
         <AuthenticatedLayout
-            user={auth.user}
-            header={<h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">Statistiques des Vendeurs</h2>}
-        >
-            <Head title="Statistiques des Vendeurs" />
-
-            <div className="py-6 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                        {/* Vendeurs List */}
-                        <div className="lg:col-span-1 bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-                            <h3 className="text-lg font-medium mb-4">Liste des Vendeurs</h3>
+        user={auth.user}
+        header={<h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">Statistiques des Vendeurs</h2>}
+    >
+        <Head title="Statistiques des Vendeurs" />
+    
+        <div className="px-4 py-6 sm:px-6 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
+                    {/* Vendeurs List */}
+                    <div className="card bg-base-100 shadow-xl lg:col-span-1">
+                        <div className="card-body">
+                            <h3 className="mb-4 text-lg font-medium card-title">Liste des Vendeurs</h3>
                             <div className="space-y-2">
                                 {vendeurs.map((vendeur) => (
                                     <div
                                         key={vendeur.id}
-                                        className={`p-1 rounded-lg cursor-pointer overflow-hidden transition-colors ${selectedVendeur?.id === vendeur.id ? 'bg-primary text-primary-content' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`}
+                                        className={`cursor-pointer overflow-hidden rounded-lg p-1 transition-colors ${
+                                            selectedVendeur?.id === vendeur.id 
+                                                ? 'bg-primary text-primary-content' 
+                                                : 'hover:bg-base-200'
+                                        }`}
                                         onClick={() => handleVendeurSelect(vendeur)}
                                     >
                                         <div className="flex items-center space-x-3">
@@ -101,22 +106,24 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
                                                 </div>
                                             </div>
                                             <div>
-                                                <p className="font-medium text-sm">{vendeur.name}</p>
-                                                <p className=" opacity-70 text-xs">{vendeur.email}</p>
+                                                <p className="text-sm font-medium">{vendeur.name}</p>
+                                                <p className="text-xs opacity-70">{vendeur.email}</p>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
-
-                        {/* Stats and Ventes */}
-                        <div className="lg:col-span-3 space-y-6">
-                            {selectedVendeur ? (
-                                <>
-                                    {/* Filters */}
-                                    <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-4">
-                                        <h3 className="text-lg font-medium mb-4">Filtrer les ventes</h3>
+                    </div>
+    
+                    {/* Stats and Ventes */}
+                    <div className="space-y-6 lg:col-span-3">
+                        {selectedVendeur ? (
+                            <>
+                                {/* Filters */}
+                                <div className="card bg-base-100 shadow-xl">
+                                    <div className="card-body">
+                                        <h3 className="mb-4 text-lg font-medium card-title">Filtrer les ventes</h3>
                                         <div className="flex flex-wrap gap-4">
                                             <button
                                                 className={`btn ${periode === 'today' ? 'btn-primary' : 'btn-ghost'}`}
@@ -142,7 +149,7 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
                                             >
                                                 Personnalisé
                                             </button>
-
+    
                                             {periode === 'custom' && (
                                                 <div className="flex items-center gap-2">
                                                     <input
@@ -169,41 +176,43 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
                                             )}
                                         </div>
                                     </div>
-
-                                    {/* Stats Summary */}
-                                    {stats && (
-                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                            <div className="stats bg-primary text-primary-content shadow">
-                                                <div className="stat">
-                                                    <div className="stat-title">Total Ventes</div>
-                                                    <div className="stat-value">{stats.total_ventes}</div>
-                                                </div>
-                                            </div>
-                                            <div className="stats bg-secondary text-secondary-content shadow">
-                                                <div className="stat">
-                                                    <div className="stat-title">Total HT</div>
-                                                    <div className="stat-value text-xl">{stats.total_ht.toLocaleString('fr-FR')} FC</div>
-                                                </div>
-                                            </div>
-                                            <div className="stats bg-accent text-accent-content shadow">
-                                                <div className="stat">
-                                                    <div className="stat-title">Total TVA</div>
-                                                    <div className="stat-value text-xl">{stats.total_tva.toLocaleString('fr-FR')} FC</div>
-                                                </div>
-                                            </div>
-                                            <div className="stats bg-neutral text-neutral-content shadow">
-                                                <div className="stat">
-                                                    <div className="stat-title">Total TTC</div>
-                                                    <div className="stat-value text-xl">{stats.total_ttc.toLocaleString('fr-FR')} FC</div>
-                                                </div>
+                                </div>
+    
+                                {/* Stats Summary */}
+                                {stats && (
+                                    <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+                                        <div className="stats bg-primary text-primary-content shadow">
+                                            <div className="stat">
+                                                <div className="stat-title">Total Ventes</div>
+                                                <div className="stat-value">{stats.total_ventes}</div>
                                             </div>
                                         </div>
-                                    )}
-
-                                    {/* Ventes List */}
-                                    <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+                                        <div className="stats bg-secondary text-secondary-content shadow">
+                                            <div className="stat">
+                                                <div className="stat-title">Total HT</div>
+                                                <div className="stat-value text-xl">{stats.total_ht.toLocaleString('fr-FR')} FC</div>
+                                            </div>
+                                        </div>
+                                        <div className="stats bg-accent text-accent-content shadow">
+                                            <div className="stat">
+                                                <div className="stat-title">Total TVA</div>
+                                                <div className="stat-value text-xl">{stats.total_tva.toLocaleString('fr-FR')} FC</div>
+                                            </div>
+                                        </div>
+                                        <div className="stats bg-neutral text-neutral-content shadow">
+                                            <div className="stat">
+                                                <div className="stat-title">Total TTC</div>
+                                                <div className="stat-value text-xl">{stats.total_ttc.toLocaleString('fr-FR')} FC</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+    
+                                {/* Ventes List */}
+                                <div className="card bg-base-100 shadow-xl overflow-hidden">
+                                    <div className="card-body p-0">
                                         <div className="overflow-x-auto">
-                                            <table className="table w-full">
+                                            <table className="table table-zebra w-full">
                                                 <thead>
                                                     <tr>
                                                         <th>Date</th>
@@ -223,13 +232,13 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
                                                                 <td>{vente.total_ttc.toLocaleString('fr-FR')} FC</td>
                                                                 <td className="flex space-x-2">
                                                                     <button
-                                                                        className="btn btn-sm btn-info"
+                                                                        className="btn btn-info btn-sm"
                                                                         onClick={() => openVenteDetails(vente)}
                                                                     >
                                                                         Détails
                                                                     </button>
                                                                     <button
-                                                                        className="btn btn-sm btn-success"
+                                                                        className="btn btn-success btn-sm"
                                                                         onClick={() => printTicket(vente.id)}
                                                                     >
                                                                         Imprimer
@@ -239,7 +248,7 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
                                                         ))
                                                     ) : (
                                                         <tr>
-                                                            <td colSpan="4" className="text-center py-4">
+                                                            <td colSpan="4" className="py-4 text-center">
                                                                 Aucune vente trouvée pour cette période
                                                             </td>
                                                         </tr>
@@ -248,111 +257,114 @@ export default function VendeurStats({ auth, vendeurs, selectedVendeur, ventes, 
                                             </table>
                                         </div>
                                     </div>
-                                </>
-                            ) : (
-                                <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-8 text-center">
-                                    <div className="text-2xl font-medium mb-2">Sélectionnez un vendeur</div>
-                                    <p className="text-gray-500 dark:text-gray-400">
+                                </div>
+                            </>
+                        ) : (
+                            <div className="card bg-base-100 shadow-xl">
+                                <div className="card-body text-center">
+                                    <div className="mb-2 text-2xl font-medium">Sélectionnez un vendeur</div>
+                                    <p className="text-base-content/60">
                                         Veuillez sélectionner un vendeur dans la liste pour afficher ses statistiques
                                     </p>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
-
-            {/* Vente Details Modal */}
-            {isModalOpen && selectedVente && (
-                <div className="modal modal-open">
-                    <div className="modal-box max-w-4xl">
-                        <h3 className="font-bold text-lg mb-4">
-                            Détails de la vente #{selectedVente.code}
-                            <span className="ml-2 badge badge-primary">
-                                {format(new Date(selectedVente.created_at), 'PPpp', { locale: fr })}
-                            </span>
-                        </h3>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                            <div>
-                                <h4 className="font-medium mb-2">Informations client</h4>
-                                <div className="bg-base-200 p-4 rounded-lg">
-                                    <p><span className="font-medium">Nom:</span> {selectedVente.client.name}</p>
-                                    {selectedVente.client.phone && (
-                                        <p><span className="font-medium">Téléphone:</span> {selectedVente.client.phone}</p>
-                                    )}
-                                    {selectedVente.client.email && (
-                                        <p><span className="font-medium">Email:</span> {selectedVente.client.email}</p>
-                                    )}
-                                </div>
-                            </div>
-                            <div>
-                                <h4 className="font-medium mb-2">Totaux</h4>
-                                <div className="bg-base-200 p-4 rounded-lg">
-                                    <p><span className="font-medium">Total HT:</span> {selectedVente.total_ht.toLocaleString('fr-FR')} FC</p>
-                                    <p><span className="font-medium">Total TVA:</span> {selectedVente.total_tva.toLocaleString('fr-FR')} FC</p>
-                                    <p><span className="font-medium">Total TTC:</span> {selectedVente.total_ttc.toLocaleString('fr-FR')} FC</p>
-                                    <p><span className="font-medium">Remise:</span> {selectedVente.remise}%</p>
-                                    <p><span className="font-medium">Montant payé:</span> {selectedVente.montant_paye.toLocaleString('fr-FR')} FC</p>
-                                </div>
+        </div>
+    
+        {/* Vente Details Modal */}
+        {isModalOpen && selectedVente && (
+            <div className="modal modal-open">
+                <div className="modal-box max-w-4xl">
+                    <h3 className="mb-4 text-lg font-bold">
+                        Détails de la vente #{selectedVente.code}
+                        <span className="ml-2 badge badge-primary">
+                            {format(new Date(selectedVente.created_at), 'PPpp', { locale: fr })}
+                        </span>
+                    </h3>
+                    
+                    <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
+                        <div>
+                            <h4 className="mb-2 font-medium">Informations client</h4>
+                            <div className="rounded-lg bg-base-200 p-4">
+                                <p><span className="font-medium">Nom:</span> {selectedVente.client.name}</p>
+                                {selectedVente.client.phone && (
+                                    <p><span className="font-medium">Téléphone:</span> {selectedVente.client.phone}</p>
+                                )}
+                                {selectedVente.client.email && (
+                                    <p><span className="font-medium">Email:</span> {selectedVente.client.email}</p>
+                                )}
                             </div>
                         </div>
-
-                        <h4 className="font-medium mb-2">Articles vendus</h4>
-                        <div className="overflow-x-auto">
-                            <table className="table w-full">
-                                <thead>
-                                    <tr>
-                                        <th>Produit</th>
-                                        <th>Quantité</th>
-                                        <th>Prix unitaire</th>
-                                        <th>TVA</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {selectedVente.articles.map((article) => (
-                                        <tr key={article.id}>
-                                            <td>
-                                                <div className="flex items-center space-x-3">
-                                                    <div className="avatar">
-                                                        <div className="mask mask-squircle w-12 h-12">
-                                                            <img src={article.produit.image || '/images/default-product.png'} alt={article.produit.nom} />
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <div className="font-bold">{article.produit.nom}</div>
-                                                        <div className="text-sm opacity-50">{article.produit.code}</div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>{article.quantite}</td>
-                                            <td>{article.prix_unitaire.toLocaleString('fr-FR')} FC</td>
-                                            <td>{article.taux_tva}%</td>
-                                            <td>{article.montant_ttc.toLocaleString('fr-FR')} FC</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="modal-action">
-                            <button 
-                                className="btn btn-success"
-                                onClick={() => printTicket(selectedVente.id)}
-                            >
-                                Imprimer le ticket
-                            </button>
-                            <button 
-                                className="btn"
-                                onClick={() => setIsModalOpen(false)}
-                            >
-                                Fermer
-                            </button>
+                        <div>
+                            <h4 className="mb-2 font-medium">Totaux</h4>
+                            <div className="rounded-lg bg-base-200 p-4">
+                                <p><span className="font-medium">Total HT:</span> {selectedVente.total_ht.toLocaleString('fr-FR')} FC</p>
+                                <p><span className="font-medium">Total TVA:</span> {selectedVente.total_tva.toLocaleString('fr-FR')} FC</p>
+                                <p><span className="font-medium">Total TTC:</span> {selectedVente.total_ttc.toLocaleString('fr-FR')} FC</p>
+                                <p><span className="font-medium">Remise:</span> {selectedVente.remise}%</p>
+                                <p><span className="font-medium">Montant payé:</span> {selectedVente.montant_paye.toLocaleString('fr-FR')} FC</p>
+                            </div>
                         </div>
                     </div>
+    
+                    <h4 className="mb-2 font-medium">Articles vendus</h4>
+                    <div className="overflow-x-auto">
+                        <table className="table w-full">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Quantité</th>
+                                    <th>Prix unitaire</th>
+                                    <th>TVA</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {selectedVente.articles.map((article) => (
+                                    <tr key={article.id}>
+                                        <td>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="avatar">
+                                                    <div className="mask mask-squircle h-12 w-12">
+                                                        <img src={article.produit.image || '/images/default-product.png'} alt={article.produit.nom} />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-bold">{article.produit.nom}</div>
+                                                    <div className="text-sm opacity-50">{article.produit.code}</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>{article.quantite}</td>
+                                        <td>{article.prix_unitaire.toLocaleString('fr-FR')} FC</td>
+                                        <td>{article.taux_tva}%</td>
+                                        <td>{article.montant_ttc.toLocaleString('fr-FR')} FC</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+    
+                    <div className="modal-action">
+                        <button 
+                            className="btn btn-success"
+                            onClick={() => printTicket(selectedVente.id)}
+                        >
+                            Imprimer le ticket
+                        </button>
+                        <button 
+                            className="btn btn-error"
+                            onClick={() => setIsModalOpen(false)}
+                        >
+                            Fermer
+                        </button>
+                    </div>
                 </div>
-            )}
-        </AuthenticatedLayout>
+            </div>
+        )}
+    </AuthenticatedLayout>
     );
 }

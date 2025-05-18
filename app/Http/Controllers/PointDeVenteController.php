@@ -261,18 +261,18 @@ class PointDeVenteController extends Controller
             event(new VenteCompleted($vente));
 
             // Retourner la réponse via Inertia
-            /*return Inertia::render('PointDeVente/Index', [
+            return Inertia::render('PointDeVente/Index', [
                 'vente' => $vente->load('articles.produit', 'client'),
                 'flash' => [
                     'message' => 'Vente enregistrée avec succès'
                 ],
                 
-            ]);*/
+            ]);/*
             return back()->with([
                 'vente' => $vente->load('articles.produit', 'client'),
                 'flash' => [
                     'message' => 'Vente enregistrée avec succès'
-                ]]);
+                ]]);*/
             
         } catch (\Exception $e) {
             return Inertia::render('PointDeVente/Index', [

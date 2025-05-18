@@ -17,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
             \Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets::class,
             \App\Http\Middleware\ShareCaisseData::class,
             \App\Http\Middleware\CheckForbiddenAccess::class,
+            
 
         ]);
         $middleware->alias([

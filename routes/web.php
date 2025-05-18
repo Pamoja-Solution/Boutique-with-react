@@ -211,6 +211,7 @@ Route::group(['middleware' => ['auth', 'verified']], function() {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Point de vente
+    
     Route::get('/point-de-vente', [PointDeVenteController::class, 'index'])->name('point-de-vente');
     Route::get('/point-de-vente/search-produits', [PointDeVenteController::class, 'searchProduits'])->name('point-de-vente.search-produits');
     Route::get('/point-de-vente/search-clients', [PointDeVenteController::class, 'searchClients'])->name('point-de-vente.search-clients');
