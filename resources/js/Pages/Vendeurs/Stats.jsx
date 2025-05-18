@@ -34,43 +34,47 @@ export default function VendeursStats({ period, mensuelles, annuelles, filters }
             <div className="py-6">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
                     {/* Filtre par date */}
-                    <div className="bg-base-300 overflow-hidden shadow-sm sm:rounded-lg mb-6 p-4">
-                        <h3 className="text-lg font-medium mb-4">Filtrer par période</h3>
-                        <div className="flex flex-col sm:flex-row gap-4">
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium mb-1">Date de début</label>
-                                <input
-                                    type="date"
-                                    value={startDate}
-                                    onChange={(e) => setStartDate(e.target.value)}
-                                    className="input input-bordered w-full"
-                                />
-                            </div>
-                            <div className="flex-1">
-                                <label className="block text-sm font-medium mb-1">Date de fin</label>
-                                <input
-                                    type="date"
-                                    value={endDate}
-                                    onChange={(e) => setEndDate(e.target.value)}
-                                    className="input input-bordered w-full"
-                                />
-                            </div>
-                            <div className="flex items-end gap-2">
-                                <button 
-                                    onClick={handleFilter}
-                                    className="btn btn-primary"
-                                >
-                                    Appliquer
-                                </button>
-                                <button 
-                                    onClick={resetFilter}
-                                    className="btn btn-ghost"
-                                >
-                                    Réinitialiser
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="card bg-base-300 shadow-sm sm:rounded-box mb-6 p-4">
+    <h3 class="text-lg font-medium mb-4">Filtrer par période</h3>
+    <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex-1">
+            <label class="label">
+                <span class="label-text">Date de début</span>
+            </label>
+            <input
+                type="date"
+                value={startDate}
+                onChange={(e) => setStartDate(e.target.value)}
+                class="input input-bordered w-full"
+            />
+        </div>
+        <div class="flex-1">
+            <label class="label">
+                <span class="label-text">Date de fin</span>
+            </label>
+            <input
+                type="date"
+                value={endDate}
+                onChange={(e) => setEndDate(e.target.value)}
+                class="input input-bordered w-full"
+            />
+        </div>
+        <div class="flex items-end gap-2">
+            <button 
+                onClick={handleFilter}
+                class="btn btn-primary"
+            >
+                Appliquer
+            </button>
+            <button 
+                onClick={resetFilter}
+                class="btn btn-ghost"
+            >
+                Réinitialiser
+            </button>
+        </div>
+    </div>
+</div>
 
                     {/* Statistiques pour la période sélectionnée */}
                     <div className="bg-base-300 overflow-hidden shadow-sm sm:rounded-lg mb-6">
